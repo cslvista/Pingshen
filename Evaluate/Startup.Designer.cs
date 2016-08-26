@@ -87,14 +87,14 @@
             // 部门ToolStripMenuItem
             // 
             this.部门ToolStripMenuItem.Name = "部门ToolStripMenuItem";
-            this.部门ToolStripMenuItem.Size = new System.Drawing.Size(158, 28);
+            this.部门ToolStripMenuItem.Size = new System.Drawing.Size(181, 28);
             this.部门ToolStripMenuItem.Text = "部门";
             this.部门ToolStripMenuItem.Click += new System.EventHandler(this.部门ToolStripMenuItem_Click);
             // 
             // 评审类别ToolStripMenuItem
             // 
             this.评审类别ToolStripMenuItem.Name = "评审类别ToolStripMenuItem";
-            this.评审类别ToolStripMenuItem.Size = new System.Drawing.Size(158, 28);
+            this.评审类别ToolStripMenuItem.Size = new System.Drawing.Size(181, 28);
             this.评审类别ToolStripMenuItem.Text = "评审类别";
             this.评审类别ToolStripMenuItem.Click += new System.EventHandler(this.评审类别ToolStripMenuItem_Click);
             // 
@@ -206,7 +206,7 @@
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(2, 5);
+            this.button1.Location = new System.Drawing.Point(13, 5);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 41);

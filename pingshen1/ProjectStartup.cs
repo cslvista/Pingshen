@@ -74,6 +74,9 @@ namespace pingshen1
         {
             conn.ConnectionString = common.Database.conn;
 
+            ClassAlterT.Enabled = false;
+            ProjectAlterT.Enabled = false;
+            ProjectAddT.Enabled = false;
             //绑定评审列别列名
             //ClassDisplay.Columns.Add("ZDZB_ZT", typeof(string));
             //ClassDisplay.Columns.Add("ZDZB_TITLE", typeof(string));
@@ -88,9 +91,7 @@ namespace pingshen1
             ProjectDisplay.Columns.Add("ZDXB_DATE", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_ID", typeof(string));
 
-            button2.Enabled = false;//项目修改
-            button1.Enabled = false;//项目新增
-            button5.Enabled = false;//评审类别修改
+
             项目新增ToolStripMenuItem1.Enabled = false;
             项目修改ToolStripMenuItem.Enabled = false;
             项目新增ToolStripMenuItem1.Enabled = false;
@@ -191,10 +192,9 @@ namespace pingshen1
             }
             catch
             {
-                button5.Enabled = false;//评审类别修改        
-                button3.Enabled = true;//评审类别新增
-                button1.Enabled = false;//项目新增
-                button2.Enabled = false;//项目修改
+                ClassAlterT.Enabled = false;
+                ProjectAlterT.Enabled = false;
+                ProjectAddT.Enabled = false;
                 评审类别新增ToolStripMenuItem.Enabled = true;
                 评审类别修改ToolStripMenuItem.Enabled = false;
                 项目新增ToolStripMenuItem1.Enabled = false;
@@ -204,10 +204,11 @@ namespace pingshen1
             }
 
             if (SelectClassZT.ToString()=="停用")
-            {               
-                button1.Enabled = false;//项目新增
-                button3.Enabled = true;//评审类别新增
-                button5.Enabled = true;//评审类别修改
+            {
+
+                ClassAlterT.Enabled = true;
+                ProjectAlterT.Enabled = false;
+                ProjectAddT.Enabled = false;
                 项目新增ToolStripMenuItem1.Enabled = false;
                 项目修改ToolStripMenuItem.Enabled = false;
                 项目新增ToolStripMenuItem1.Enabled = false;
@@ -215,10 +216,9 @@ namespace pingshen1
             }
             else
             {
-                button2.Enabled = false;//项目修改
-                button1.Enabled = true;//项目新增
-                button5.Enabled = true;//评审类别修改
-                button3.Enabled = true;//评审类别新增
+                ClassAlterT.Enabled = true;
+                ProjectAlterT.Enabled = false;
+                ProjectAddT.Enabled = true;
                 项目新增ToolStripMenuItem1.Enabled = true;
                 项目修改ToolStripMenuItem.Enabled = false;
                 评审类别修改ToolStripMenuItem.Enabled = true;
@@ -318,8 +318,8 @@ namespace pingshen1
                 }
                 catch
                 {
-                    button1.Enabled = true;//项目新增
-                    button2.Enabled = true;//项目修改
+                    ProjectAlterT.Enabled = false;
+                    ProjectAddT.Enabled = true;
                     项目新增ToolStripMenuItem.Enabled = true;
                     项目修改ToolStripMenuItem.Enabled = false;
                     return;
@@ -327,8 +327,8 @@ namespace pingshen1
 
                 if (SelectSX.Length>0)
                 {
-                    button1.Enabled = true ;//项目新增
-                    button2.Enabled = true;//项目修改
+                    ProjectAlterT.Enabled = true;
+                    ProjectAddT.Enabled =true;
                     项目新增ToolStripMenuItem.Enabled = true;
                     项目修改ToolStripMenuItem.Enabled = true ;
                 }
@@ -336,10 +336,10 @@ namespace pingshen1
                 }
                 else if (SelectSX.Length == 0)
                 {
-                    button1.Enabled = false;//项目新增
-                    button2.Enabled = false;//项目修改
-                    项目新增ToolStripMenuItem.Enabled = false;
-                    项目修改ToolStripMenuItem.Enabled = false;
+                      ProjectAlterT.Enabled = false;
+                      ProjectAddT.Enabled = false;
+                      项目新增ToolStripMenuItem.Enabled = false;
+                      项目修改ToolStripMenuItem.Enabled = false;
                 }
 
             }
@@ -377,27 +377,28 @@ namespace pingshen1
 
         private void 评审类别新增ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button3.PerformClick();
+            ClassAddT_Click(null, null);
         }
 
         private void 评审类别修改ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button5.PerformClick();
+            ClassAlterT_Click(null, null);
         }
+
 
         private void 项目新增ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button1.PerformClick();
+            ProjectAddT_Click(null, null);
         }
 
         private void 项目新增ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            button1.PerformClick();
+            ProjectAddT_Click(null, null);
         }
 
         private void 项目修改ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button2.PerformClick();
+            ProjectAlterT_Click(null, null);
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -405,7 +406,51 @@ namespace pingshen1
 
         }
 
+        private void ProjectAddT_Click(object sender, EventArgs e)
+        {
+            //项目新增
+            ProjectAdd frm = new ProjectAdd();
+            frm.SelectClass = SelectClass.ToString();
+            frm.SelectClassID = SelectClassID.ToString();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
 
+        private void ClassAddT_Click(object sender, EventArgs e)
+        {
+            ClassAdd frm = new ClassAdd();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
+
+        private void ClassAlterT_Click(object sender, EventArgs e)
+        {
+            //评审类别修改
+            ClassAlter frm = new ClassAlter();
+            frm.ZDZB_ID = SelectClassID;
+            frm.ZDZB_TITLE = SelectClass;
+            frm.ZDZB_BZ = SelectClassBZ;
+            frm.ZDZB_ZT = SelectClassZT;
+            frm.ZDZB_DATE = SelectClassDATE;
+            frm.SelectClassI = SelectClassI;
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
+
+        private void ProjectAlterT_Click(object sender, EventArgs e)
+        {
+            //评审项目修改
+            ProjectAlter frm = new ProjectAlter();
+            frm.SelectClass = SelectClass;
+            frm.SelectBH = SelectBH;
+            frm.SelectNAME = SelectNAME;
+            frm.SelectSX = SelectSX;
+            frm.SelectDate = SelectDate;
+            frm.SelectID = SelectID;
+            frm.SelectProjectI = gridView1.GetDataSourceRowIndex(gridView1.FocusedRowHandle);
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
     }
 }
 

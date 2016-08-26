@@ -16,6 +16,7 @@ namespace Department
     public partial class DepartmentStartup : Form
     {
         SqlConnection conn = new SqlConnection();
+        SqlConnection conn1 = new SqlConnection();
         List<string> ZDBM_ID = new List<string>();//部门名称
         List<string> ZDBM_MC = new List<string>();//部门状态
         List<string> ZDBM_DD = new List<string>();//部门地点
@@ -82,10 +83,11 @@ namespace Department
         private void DepartmentStartup_Load(object sender, EventArgs e)
         {            
             conn.ConnectionString = common.Database.conn;
-            button2.Enabled = false;
-            button3.Enabled = false;
-            button4.Enabled = false;
+            conn1.ConnectionString = common.Database.conn;
 
+            BMAlterT.Enabled = false;
+            ProjectDeleteT.Enabled = false;
+            ProjectAddT.Enabled = false;
 
             BMDisplay.Columns.Add("ZDMB_ZT", typeof(string));
             BMDisplay.Columns.Add("ZDBM_MC", typeof(string));
@@ -190,9 +192,9 @@ namespace Department
             }
             catch
             {
-                button4.Enabled = false;//部门修改
-                button2.Enabled = false;//项目新增
-                button3.Enabled = false;//项目删除
+                BMAlterT.Enabled = false;
+                ProjectDeleteT.Enabled = false;
+                ProjectAddT.Enabled = false;
                 部门修改ToolStripMenuItem.Enabled = false;
                 项目新增ToolStripMenuItem1.Enabled = false;
                 ProjectDisplay.Clear();
@@ -202,20 +204,18 @@ namespace Department
 
             if (SelectBMZT.ToString() == "存在")
             {
+                BMAlterT.Enabled = true;
+                ProjectDeleteT.Enabled = false;
+                ProjectAddT.Enabled = true;
                 部门新增ToolStripMenuItem.Enabled = true;
                 部门修改ToolStripMenuItem.Enabled = true;
                 项目新增ToolStripMenuItem1.Enabled = true;
-                button4.Enabled = true;//部门修改
-                button2.Enabled = true;//项目新增
-                button3.Enabled = false;//项目删除
-
             }
             else
             {
-                button4.Enabled = true;//部门修改
-                button2.Enabled = false;//项目新增
-                button3.Enabled = false;//项目删除
-
+                BMAlterT.Enabled = true;
+                ProjectDeleteT.Enabled = false;
+                ProjectAddT.Enabled = false;
                 部门新增ToolStripMenuItem.Enabled = true;
                 部门修改ToolStripMenuItem.Enabled = true;
                 项目新增ToolStripMenuItem1.Enabled = false;
@@ -254,13 +254,18 @@ namespace Department
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("错误1:"+ex.Message);
                 t2_flag = 0;
                 return;
             }
             finally
             {
                 conn.Close();
+            }
+            if (ZDZB_ID_ALL.Count == 0)
+            {
+                t2_flag = 0;
+                return;
             }
             //2.判断这个部门是否和这个评审主表关联
             for (int i=0;i< ZDZB_ID_ALL.Count; i++)
@@ -283,7 +288,7 @@ namespace Department
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("错误2:"+ex.Message);
                     conn.Close();
                     t2_flag = 0;
                     return;
@@ -306,7 +311,7 @@ namespace Department
                 }
                 catch (Exception ex)
                 {                    
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("错误3:" + ex.Message);
                     t2_flag = 0;
                     return;
                 }
@@ -324,7 +329,9 @@ namespace Department
                     comboBox1.Items.Add(ZDZB_TITLE[i].ToString());
 
                 }
-                
+                comboBox1.Text = ZDZB_TITLE[0];
+
+
             }));
             t2_flag = 0;
         }
@@ -348,7 +355,7 @@ namespace Department
             //标题：单击项目列表
 
             //1.获取表格中数据
-            button2.Enabled = true;//项目新增可用
+
             SelectProjectXB_BH.Length = 0;
             SelectProjectXB_NAME.Length = 0;
             SelectProjectXB_SX.Length = 0;
@@ -365,20 +372,23 @@ namespace Department
             }
             catch
             {
-                button3.Enabled = false;//项目删除不可用
+                ProjectDeleteT.Enabled = false;
+                项目新增单ToolStripMenuItem.Enabled = true;
                 项目删除ToolStripMenuItem.Enabled = false;
                 return;
             }
 
             if (SelectProjectXB_SX.ToString() =="对所有部门有效")
             {
+                ProjectDeleteT.Enabled = false;
+                项目新增单ToolStripMenuItem.Enabled = true;
                 项目删除ToolStripMenuItem.Enabled = false;
-                button3.Enabled = false;//项目删除
             }
             else
             {
+                ProjectDeleteT.Enabled = true;
+                项目新增单ToolStripMenuItem.Enabled = true;
                 项目删除ToolStripMenuItem.Enabled = true;
-                button3.Enabled = true;//项目删除
             }
         }
 
@@ -432,8 +442,8 @@ namespace Department
             {
                 string sql = String.Format(
                "select a.ZDXB_ID,b.ZDXB_BH,b.ZDXB_NAME,b.ZDXB_SX from Y_ZDZBBMGX a inner join Y_ZDXB b on a.ZDXB_ID = b.ZDXB_ID where a.ZDBM_ID = '{0}' and a.ZDZB_ID='{1}'", SelectBMID, SelectProjectZB_ID);
-                SqlCommand comm = new SqlCommand(sql, conn);
-                conn.Open();
+                SqlCommand comm = new SqlCommand(sql, conn1);
+                conn1.Open();
                 SqlDataReader readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
@@ -455,15 +465,15 @@ namespace Department
             }
             finally
             {
-                conn.Close();
+                conn1.Close();
             }
             //2.2 读取所有部门有效的数据
             try
             {
                 string sql = String.Format(
-               "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX from Y_ZDXB where ZDZB_ID='{0}' and ZDXB_SX='1';", SelectProjectZB_ID);
-                conn.Open();
-                SqlCommand comm = new SqlCommand(sql, conn);
+               "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX from Y_ZDXB where ZDZB_ID='{0}' and ZDXB_SX='1';", SelectProjectZB_ID);                
+                SqlCommand comm = new SqlCommand(sql, conn1);
+                conn1.Open();
                 SqlDataReader readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
@@ -485,7 +495,7 @@ namespace Department
             }
             finally
             {
-                conn.Close();
+                conn1.Close();
             }
             //将数据库内容加入到DataTable中 
 
@@ -525,30 +535,21 @@ namespace Department
             }
         }
 
-        private void 项目新增ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            button2.PerformClick();
-        }
-
-        private void 项目删除ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            button3.PerformClick();
-        }
 
 
         private void 部门新增ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button1.PerformClick();
+            BMAddT_Click(null, null);
         }
 
         private void 部门修改ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button4.PerformClick();
+            BMAlterT_Click(null, null);
         }
 
         private void 项目新增ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            button2.PerformClick();
+            ProjectAddT_Click(null, null);
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -560,7 +561,7 @@ namespace Department
 
         private void 部门新增ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            ProjectAddT_Click(null, null);
         }
 
         private void 部门修改ToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -614,6 +615,89 @@ namespace Department
             ProjectAddMore frm = new ProjectAddMore();
             frm.StartPosition = FormStartPosition.CenterScreen;
             frm.Show();
+        }
+
+        
+
+
+        private void BMAddT_Click(object sender, EventArgs e)
+        {
+            DepartmentAdd frm = new DepartmentAdd();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
+
+        private void BMAlterT_Click(object sender, EventArgs e)
+        {
+            DepartmentAlter frm = new DepartmentAlter();
+            frm.SelectBMID = SelectBMID;
+            frm.SelectBMMC = SelectBMMC;
+            frm.SelectBMDD = SelectBMDD;
+            frm.SelectBMZT = SelectBMZT;
+            frm.SelectBMDATE = SelectBMDATE;
+            frm.SelectBMI = SelectBMI;
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
+
+        private void ProjectDeleteT_Click(object sender, EventArgs e)
+        {
+            ProjectDelete frm = new ProjectDelete();
+            frm.BMMC = SelectBMMC.ToString();
+            frm.BMID = SelectBMID.ToString();
+            frm.BMDD = SelectBMDD.ToString();
+            frm.PSLB = SelectProjectZB_TITLE.ToString();
+            frm.XMBH = SelectProjectXB_BH.ToString();
+            frm.XMID = SelectProjectXB_ID.ToString();
+            frm.XMNR = SelectProjectXB_NAME.ToString();
+            frm.XMSX = SelectProjectXB_SX.ToString();
+            frm.SelectProjectI = SelectProjectI;
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
+
+        private void ProjectAddMoreT_Click(object sender, EventArgs e)
+        {
+            ProjectAddMore frm = new ProjectAddMore();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.Show();
+        }
+
+        private void ProjectAddT_Click(object sender, EventArgs e)
+        {
+            ProjectAdd frm = new ProjectAdd();
+            frm.BMMC = SelectBMMC.ToString();
+            frm.BMID = SelectBMID.ToString();
+            frm.BMDD = SelectBMDD.ToString();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
+
+        private void DefaultClass_Click(object sender, EventArgs e)
+        {
+            DefaultClass frm = new DefaultClass();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.Show();
+        }
+
+        private void 项目删除ToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ProjectDeleteT_Click(null, null);
+        }
+
+        private void 项目新增单ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProjectAddT_Click(null, null);
+        }
+
+        private void 项目新增多ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProjectAddMoreT_Click(null, null);
+        }
+
+        private void gridControl1_MouseUp_1(object sender, MouseEventArgs e)
+        {
+            gridControl1_Click(null, null);
         }
     }
 }
