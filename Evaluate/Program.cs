@@ -13,10 +13,11 @@ namespace Evaluate
         /// </summary>
         [STAThread]
         static void Main()
-        {
+        {          
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("zh-Hans");
+            Application.Run(new Startup());
         }
     }
 }

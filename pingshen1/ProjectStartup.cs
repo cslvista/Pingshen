@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Threading;
 
+
+
 namespace pingshen1
 {
     public partial class ProjectStartup : Form
@@ -20,21 +22,39 @@ namespace pingshen1
         List<string> ZDZB_ID = new List<string>();
         List<string> ZDZB_TITLE = new List<string>();
         List<string> ZDZB_BZ = new List<string>();
-        List<string> ZDZB_ZT = new List<string>();
+        List<string> ZDZB_ZT = new List<string>();//状态：可用，停用
         List<string> ZDZB_DATE = new List<string>();
         
         //属于Y_ZDXB（评审细表）
         List<string> ZDXB_ID = new List<string>();
-        List<string> ZDZB_ID1 = new List<string>();
         List<string> ZDXB_BH = new List<string>();
         List<string> ZDXB_NAME = new List<string>();
         List<string> ZDXB_SX = new List<string>();
         List<string> ZDXB_DATE = new List<string>();
 
         private int t2_flag=0;//用于线程结束的判断
-        DataTable ClassDisplay = new DataTable();
-        DataTable ProjectDisplay = new DataTable();
-        private string SelectClass;
+        public DataTable ClassDisplay = new DataTable();
+        public DataTable ProjectDisplay = new DataTable();
+
+        public StringBuilder SelectClassID=new StringBuilder();//单击评审类别ID
+        public StringBuilder SelectClass= new StringBuilder();//单击评审类别
+        public StringBuilder SelectClassBZ = new StringBuilder();//单击评审类别
+        public StringBuilder SelectClassZT = new StringBuilder();//单击评审类别
+        public StringBuilder SelectClassDATE = new StringBuilder();//单击评审类别
+        public int  SelectClassI=0;//单击评审类别的行数
+
+
+        public StringBuilder SelectBH = new StringBuilder();//单击项目编号
+        public StringBuilder SelectNAME = new StringBuilder();//单击项目内容
+        public StringBuilder SelectSX = new StringBuilder();//单击项目属性
+        public StringBuilder SelectDate = new StringBuilder();//单击项目日期
+        public StringBuilder SelectID = new StringBuilder();//单击项目日期
+        public int SelectProjectI=0;//单击项目的行数
+
+        public delegate void UpdateUI();
+
+        int xWidth = SystemInformation.PrimaryMonitorSize.Width;//获取显示器屏幕宽度 
+        int yHeight = SystemInformation.PrimaryMonitorSize.Height;//获取显示器屏幕高度 
         public ProjectStartup()
         {
             InitializeComponent();
@@ -42,31 +62,47 @@ namespace pingshen1
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            //项目新增
+            ProjectAdd frm = new ProjectAdd();
+            frm.SelectClass = SelectClass.ToString();
+            frm.SelectClassID = SelectClassID.ToString();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
         }
 
         private void ProjectStartup_Load(object sender, EventArgs e)
         {
-            conn.ConnectionString = Database.conn;
-            
+            conn.ConnectionString = common.Database.conn;
+
             //绑定评审列别列名
-            ClassDisplay.Columns.Add("ZDZB_ZT", typeof(string));
-            ClassDisplay.Columns.Add("ZDZB_TITLE", typeof(string));
-            ClassDisplay.Columns.Add("ZDZB_BZ", typeof(string));
-            ClassDisplay.Columns.Add("ZDZB_DATE", typeof(string));
+            //ClassDisplay.Columns.Add("ZDZB_ZT", typeof(string));
+            //ClassDisplay.Columns.Add("ZDZB_TITLE", typeof(string));
+            //ClassDisplay.Columns.Add("ZDZB_BZ", typeof(string));
+            //ClassDisplay.Columns.Add("ZDZB_DATE", typeof(string));
+            //ClassDisplay.Columns.Add("ZDZB_ID", typeof(string));
 
             //绑定项目列名
             ProjectDisplay.Columns.Add("ZDXB_BH", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_NAME", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_SX", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_DATE", typeof(string));
+            ProjectDisplay.Columns.Add("ZDXB_ID", typeof(string));
 
-            Control.CheckForIllegalCrossThreadCalls = false;
-            Thread t1 = new Thread(WriteList);//将结果显示到第一个gridControl上
-            t1.Start();
+            button2.Enabled = false;//项目修改
+            button1.Enabled = false;//项目新增
+            button5.Enabled = false;//评审类别修改
+            项目新增ToolStripMenuItem1.Enabled = false;
+            项目修改ToolStripMenuItem.Enabled = false;
+            项目新增ToolStripMenuItem1.Enabled = false;
+            评审类别修改ToolStripMenuItem.Enabled = false;
+
+            //WriteList();
+            gridView2.OptionsBehavior.AutoExpandAllGroups = true;//分组展开
+            gridView1.OptionsBehavior.AutoExpandAllGroups = true;//分组展开
+            gridView1.BestFitColumns();//自动调整列宽
+            gridView2.BestFitColumns();//自动调整列宽
 
             
-           
         }
 
         public void WriteList()
@@ -100,53 +136,116 @@ namespace pingshen1
             {
                 conn.Close();
             }
-            for (int i=0;i< ZDZB_ID.Count; i++)
+            for (int i=0; i< ZDZB_ID.Count; i++)
             {
                 if (ZDZB_ZT[i]=="1")
-                ClassDisplay.Rows.Add(new object[] {"在用", ZDZB_TITLE[i], ZDZB_BZ [i], ZDZB_DATE[i] });
+                ClassDisplay.Rows.Add(new object[] {"在用", ZDZB_TITLE[i], ZDZB_BZ [i], ZDZB_DATE[i], ZDZB_ID[i]});
                 else
                 {
-                ClassDisplay.Rows.Add(new object[] { "停用", ZDZB_TITLE[i], ZDZB_BZ[i], ZDZB_DATE[i] });
+                ClassDisplay.Rows.Add(new object[] { "停用", ZDZB_TITLE[i], ZDZB_BZ[i], ZDZB_DATE[i], ZDZB_ID[i]});
                 }
             }
             
             gridControl2.DataSource = ClassDisplay;
-
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            //评审项目修改
             ProjectAlter frm = new ProjectAlter();
+            frm.SelectClass = SelectClass;
+            frm.SelectBH = SelectBH;
+            frm.SelectNAME = SelectNAME;
+            frm.SelectSX = SelectSX;
+            frm.SelectDate = SelectDate;
+            frm.SelectID = SelectID;
+            frm.SelectProjectI= gridView1.GetDataSourceRowIndex(gridView1.FocusedRowHandle);
+            frm.StartPosition = FormStartPosition.CenterScreen;
             frm.ShowDialog(this);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ClassAlter frm = new ClassAlter();
-            frm.ZDZB_ID = ZDZB_ID;
-            frm.ZDZB_TITLE = ZDZB_TITLE;
-            frm.ZDZB_BZ = ZDZB_BZ;
-            frm.ZDZB_ZT = ZDZB_ZT;
-            frm.ZDZB_DATE = ZDZB_DATE;
+            ClassAdd frm = new ClassAdd();
+            frm.StartPosition = FormStartPosition.CenterScreen;
             frm.ShowDialog(this);
         }
         private void gridControl2_Click(object sender, EventArgs e)
         {
-            // string colValue = gridView1.GetFocusedRowCellValue(gridView1.FocusedColumn);
-            // MessageBox.Show(colValue);
-            SelectClass = "DB2BD394-524C-4874-B2DE-BC6AB983455C";
-            //if (t2_flag == 0)
-            //{
-            //    Thread t2 = new Thread(WriteDataGrid);//将评审细表显示到表格上
-            //    t2.Start();
-            //}
-            WriteDataGrid();
+
+            gridControl1.DataSource = null;
+            ProjectDisplay.Clear();
+            SelectClassID.Length=0;
+            SelectClass.Length = 0;
+            SelectClassBZ.Length = 0;
+            SelectClassZT.Length = 0;
+            SelectClassDATE.Length = 0;
+            try //单击到状态行的时候，会出错，因此要catch
+            {
+                SelectClassID.Append(gridView2.GetFocusedRowCellValue("ZDZB_ID").ToString());
+                SelectClass.Append(gridView2.GetFocusedRowCellValue("ZDZB_TITLE").ToString());
+                SelectClassBZ.Append(gridView2.GetFocusedRowCellValue("ZDZB_BZ").ToString());
+                SelectClassZT.Append(gridView2.GetFocusedRowCellValue("ZDZB_ZT").ToString());
+                SelectClassDATE.Append(gridView2.GetFocusedRowCellValue("ZDZB_DATE").ToString());
+                SelectClassI = gridView2.GetDataSourceRowIndex(gridView2.FocusedRowHandle);
+            }
+            catch
+            {
+                button5.Enabled = false;//评审类别修改        
+                button3.Enabled = true;//评审类别新增
+                button1.Enabled = false;//项目新增
+                button2.Enabled = false;//项目修改
+                评审类别新增ToolStripMenuItem.Enabled = true;
+                评审类别修改ToolStripMenuItem.Enabled = false;
+                项目新增ToolStripMenuItem1.Enabled = false;
+                项目新增ToolStripMenuItem1.Enabled = false;
+                ProjectDisplay.Clear();
+                return;
+            }
+
+            if (SelectClassZT.ToString()=="停用")
+            {               
+                button1.Enabled = false;//项目新增
+                button3.Enabled = true;//评审类别新增
+                button5.Enabled = true;//评审类别修改
+                项目新增ToolStripMenuItem1.Enabled = false;
+                项目修改ToolStripMenuItem.Enabled = false;
+                项目新增ToolStripMenuItem1.Enabled = false;
+                评审类别修改ToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                button2.Enabled = false;//项目修改
+                button1.Enabled = true;//项目新增
+                button5.Enabled = true;//评审类别修改
+                button3.Enabled = true;//评审类别新增
+                项目新增ToolStripMenuItem1.Enabled = true;
+                项目修改ToolStripMenuItem.Enabled = false;
+                评审类别修改ToolStripMenuItem.Enabled = true;
+            }
+            
+            if (t2_flag == 0)
+            {
+                Thread t2 = new Thread(WriteDataGrid);//将评审细表显示到表格上
+                t2.IsBackground = true;
+                t2.Start();
+            }
+            
         }
         public void WriteDataGrid()
         {
             //将评审细表显示到表格上
+           
             t2_flag = 1;//线程在运行标志
-            string sql = String.Format("select ZDXB_ID,ZDZB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX,ZDXB_DATE from Y_ZDXB where ZDZB_ID='{0}'",SelectClass);
+            //清空list集合
+            ZDXB_ID.Clear();
+            ZDXB_BH.Clear();
+            ZDXB_NAME.Clear();
+            ZDXB_SX.Clear();
+            ZDXB_DATE.Clear();
+            
+            
+            string sql = String.Format("select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX,ZDXB_DATE from Y_ZDXB where ZDZB_ID='{0}'",SelectClassID);
             SqlCommand comm = new SqlCommand(sql, conn);
             try
             {
@@ -155,14 +254,12 @@ namespace pingshen1
                 if (readData.HasRows)
                 {
                     while (readData.Read())
-                    {
-                        
+                    {                        
                         ZDXB_ID.Add(readData[0].ToString());
-                        ZDZB_ID1.Add(readData[1].ToString());
-                        ZDXB_BH.Add(readData[2].ToString());
-                        ZDXB_NAME.Add(readData[3].ToString());
-                        ZDXB_SX.Add(readData[4].ToString());
-                        ZDXB_DATE.Add(readData[5].ToString());
+                        ZDXB_BH.Add(readData[1].ToString());
+                        ZDXB_NAME.Add(readData[2].ToString());
+                        ZDXB_SX.Add(readData[3].ToString());
+                        ZDXB_DATE.Add(readData[4].ToString());
                     }
                 }
 
@@ -174,17 +271,142 @@ namespace pingshen1
             }
             finally
             {
+                t2_flag = 0;
                 conn.Close();
             }
-            for (int i = 0; i <ZDXB_ID.Count; i++)
-            {
-                ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], ZDXB_SX[i], ZDXB_DATE[i] });
-            }
+            //将数据库内容加入到DataTable中
 
-            gridControl1.DataSource = ProjectDisplay;
+            for (int i = 0; i < ZDXB_ID.Count; i++)
+            {
+                if (ZDXB_SX[i] == "1")
+                {
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对所有部门有效", ZDXB_DATE[i], ZDXB_ID[i] });
+                }
+                else
+                {
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对部分部门有效", ZDXB_DATE[i], ZDXB_ID[i] });
+                }
+
+            }
+            this.Invoke(new UpdateUI(delegate () 
+            {                
+                gridControl1.DataSource = ProjectDisplay;
+            } ));
             t2_flag = 0;//线程结束标志
+            
+            
         }
 
-  
+        private void gridControl1_Click(object sender, EventArgs e)
+        {
+            //标题：表格2被单击
+            int count = gridView1.RowCount;//判断有没有行
+            if (count >= 1)
+            {
+                SelectBH.Length = 0;
+                SelectNAME.Length = 0;
+                SelectSX.Length = 0;
+                SelectDate.Length = 0;
+                SelectID.Length = 0;
+                try //单击到分组的时候会出错
+                {
+                    SelectBH.Append(gridView1.GetFocusedRowCellValue("ZDXB_BH").ToString());
+                    SelectNAME.Append(gridView1.GetFocusedRowCellValue("ZDXB_NAME").ToString());
+                    SelectSX.Append(gridView1.GetFocusedRowCellValue("ZDXB_SX").ToString());
+                    SelectDate.Append(gridView1.GetFocusedRowCellValue("ZDXB_DATE").ToString());
+                    SelectID.Append(gridView1.GetFocusedRowCellValue("ZDXB_ID").ToString());
+                }
+                catch
+                {
+                    button1.Enabled = true;//项目新增
+                    button2.Enabled = true;//项目修改
+                    项目新增ToolStripMenuItem.Enabled = true;
+                    项目修改ToolStripMenuItem.Enabled = false;
+                    return;
+                }
+
+                if (SelectSX.Length>0)
+                {
+                    button1.Enabled = true ;//项目新增
+                    button2.Enabled = true;//项目修改
+                    项目新增ToolStripMenuItem.Enabled = true;
+                    项目修改ToolStripMenuItem.Enabled = true ;
+                }
+
+                }
+                else if (SelectSX.Length == 0)
+                {
+                    button1.Enabled = false;//项目新增
+                    button2.Enabled = false;//项目修改
+                    项目新增ToolStripMenuItem.Enabled = false;
+                    项目修改ToolStripMenuItem.Enabled = false;
+                }
+
+            }
+
+        private void gridControl1_MouseUp(object sender, MouseEventArgs e)
+        {
+            gridControl1_Click(null, null);
+        }
+
+        private void gridControl2_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                gridControl2_Click(null, null);
+            }
+        }
+
+
+
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //评审类别修改
+            ClassAlter frm = new ClassAlter();
+            frm.ZDZB_ID = SelectClassID;
+            frm.ZDZB_TITLE = SelectClass;
+            frm.ZDZB_BZ = SelectClassBZ;
+            frm.ZDZB_ZT = SelectClassZT;
+            frm.ZDZB_DATE = SelectClassDATE;
+            frm.SelectClassI = SelectClassI;
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.ShowDialog(this);
+        }
+
+
+        private void 评审类别新增ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button3.PerformClick();
+        }
+
+        private void 评审类别修改ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button5.PerformClick();
+        }
+
+        private void 项目新增ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button1.PerformClick();
+        }
+
+        private void 项目新增ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            button1.PerformClick();
+        }
+
+        private void 项目修改ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button2.PerformClick();
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
     }
 }
+
+

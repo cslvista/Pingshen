@@ -54,7 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database.cs" />
+    <Compile Include="ClassAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClassAdd.Designer.cs">
+      <DependentUpon>ClassAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="ProjectAdd.cs">
       <SubType>Form</SubType>
@@ -81,6 +86,12 @@
     <Compile Include="ProjectStartup.designer.cs">
       <DependentUpon>ProjectStartup.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ClassAdd.resx">
+      <DependentUpon>ClassAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProjectAdd.resx">
+      <DependentUpon>ProjectAdd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -112,6 +123,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\common\common.csproj">
+      <Project>{0cf2c838-842f-4aea-9d73-6cc076a83742}</Project>
+      <Name>common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
