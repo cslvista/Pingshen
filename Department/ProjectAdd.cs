@@ -63,6 +63,7 @@ namespace Department
             ProjectDisplay.Columns.Add("ZDXB_NAME", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_SX", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_ID", typeof(string));
+            ProjectDisplay.Columns.Add("ZDXB_BZ", typeof(string));
 
             ProjectADD.Columns.Add("ZDZB_TITLE", typeof(string));
             ProjectADD.Columns.Add("ZDXB_BH", typeof(string));
@@ -70,8 +71,9 @@ namespace Department
             ProjectADD.Columns.Add("ZDXB_SX", typeof(string));
             ProjectADD.Columns.Add("ZDZB_ID", typeof(string));
             ProjectADD.Columns.Add("ZDXB_ID", typeof(string));
+            ProjectADD.Columns.Add("ZDXB_BZ", typeof(string));
 
-            
+
             WriteCombobox();
             gridView1.BestFitColumns();//自动调整列宽
             gridView2.BestFitColumns();//自动调整列宽
@@ -374,7 +376,6 @@ namespace Department
         {
             //标题：清空
             ProjectADD.Clear();
-            gridControl2.DataSource = null;
             comboBox1_SelectedIndexChanged(null, null);
         }
 
@@ -382,15 +383,14 @@ namespace Department
         {
             //标题：全部添加
             button5.Enabled = true; //清空
-            int Rows = ProjectDisplay.Rows.Count;//过程中会动态变化
-            for (int i = 0; i < Rows; i++)
+            int Rows = gridView1.RowCount;//过程中会动态变化
+            for (int i = 0; i < Rows ; i++)
             {
-                ProjectADD.Rows.Add(new object[] { SelectZDZB_TITLE,ProjectDisplay.Rows[0][0].ToString(), ProjectDisplay.Rows[0][1].ToString(), ProjectDisplay.Rows[0][2].ToString(), SelectZDZB_ID, ProjectDisplay.Rows[0][3].ToString() });
-                ProjectDisplay.Rows.RemoveAt(0);
+                DataRow dr = gridView1.GetDataRow(0);
+                ProjectADD.Rows.Add(new object[] { SelectZDZB_TITLE, dr[0].ToString(), dr[1].ToString(), dr[2].ToString(), SelectZDZB_ID, dr[3].ToString(), dr[4].ToString() });
+                ProjectDisplay.Rows.RemoveAt(gridView1.GetDataSourceRowIndex(0));
             }
-
             gridControl2.DataSource = ProjectADD;
-
         }
     }
 }

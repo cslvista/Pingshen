@@ -52,7 +52,7 @@ namespace pingshen1
             }else
             {
                 SX_ZT = "0";
-                SX = "对部分部门有效";
+                SX = "对指定部门有效";
             }
 
             //2.写入评审细表
@@ -86,13 +86,13 @@ namespace pingshen1
             
             //4.将数据添加到原窗体的表格中
             ProjectStartup f1 = (ProjectStartup)this.Owner;
-            f1.ProjectDisplay.Rows.Add(new object[] {XMBH, XMNR, SX, DateTime.Now.ToString()});                   
+            f1.ProjectDisplay.Rows.Add(new object[] {XMBH, XMNR, XMBZ, SX, DateTime.Now.ToString()});                   
             f1.gridControl1.DataSource = f1.ProjectDisplay;
             textBox1.Text = "";
             textBox2.Text = "";
             textBox3.Text = "";
             checkBox2.Checked = false;
-            MessageBox.Show("添加成功");
+            MessageBox.Show("添加成功!");
             
         }
     }

@@ -49,6 +49,7 @@ namespace Department
         List<string> ZDXB_BH = new List<string>();
         List<string> ZDXB_NAME = new List<string>();
         List<string> ZDXB_SX = new List<string>();
+        List<string> ZDXB_BZ = new List<string>();
 
         int xWidth = SystemInformation.PrimaryMonitorSize.Width;//获取显示器屏幕宽度 
         int yHeight = SystemInformation.PrimaryMonitorSize.Height;//获取显示器屏幕高度
@@ -98,6 +99,7 @@ namespace Department
             ProjectDisplay.Columns.Add("ZDXB_BH", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_NAME", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_SX", typeof(string));
+            ProjectDisplay.Columns.Add("ZDXB_BZ", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_ID", typeof(string));
 
             WriteList();
@@ -435,13 +437,14 @@ namespace Department
             ZDXB_BH.Clear();
             ZDXB_NAME.Clear();
             ZDXB_SX.Clear();
+            ZDXB_BZ.Clear();
 
             //2 从数据库中读取内容
-            //2.1 先读取部分部门有效的数据            
+            //2.1 先读取对指定部分部门有效的数据            
             try
             {
                 string sql = String.Format(
-               "select a.ZDXB_ID,b.ZDXB_BH,b.ZDXB_NAME,b.ZDXB_SX from Y_ZDZBBMGX a inner join Y_ZDXB b on a.ZDXB_ID = b.ZDXB_ID where a.ZDBM_ID = '{0}' and a.ZDZB_ID='{1}'", SelectBMID, SelectProjectZB_ID);
+               "select a.ZDXB_ID,b.ZDXB_BH,b.ZDXB_NAME,b.ZDXB_SX,b.ZDXB_BZ from Y_ZDZBBMGX a inner join Y_ZDXB b on a.ZDXB_ID = b.ZDXB_ID where a.ZDBM_ID = '{0}' and a.ZDZB_ID='{1}'", SelectBMID, SelectProjectZB_ID);
                 SqlCommand comm = new SqlCommand(sql, conn1);
                 conn1.Open();
                 SqlDataReader readData = comm.ExecuteReader();
@@ -453,6 +456,7 @@ namespace Department
                         ZDXB_BH.Add(readData[1].ToString());
                         ZDXB_NAME.Add(readData[2].ToString());
                         ZDXB_SX.Add(readData[3].ToString());
+                        ZDXB_BZ.Add(readData[4].ToString());
                     }
                 }
 
@@ -467,11 +471,11 @@ namespace Department
             {
                 conn1.Close();
             }
-            //2.2 读取所有部门有效的数据
+            //2.2 再读取对所有部门有效的数据
             try
             {
                 string sql = String.Format(
-               "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX from Y_ZDXB where ZDZB_ID='{0}' and ZDXB_SX='1';", SelectProjectZB_ID);                
+               "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX,ZDXB_BZ from Y_ZDXB where ZDZB_ID='{0}' and ZDXB_SX='1';", SelectProjectZB_ID);                
                 SqlCommand comm = new SqlCommand(sql, conn1);
                 conn1.Open();
                 SqlDataReader readData = comm.ExecuteReader();
@@ -483,6 +487,7 @@ namespace Department
                         ZDXB_BH.Add(readData[1].ToString());
                         ZDXB_NAME.Add(readData[2].ToString());
                         ZDXB_SX.Add(readData[3].ToString());
+                        ZDXB_BZ.Add(readData[4].ToString());
                     }
                 }
 
@@ -503,10 +508,10 @@ namespace Department
             {
                 if (ZDXB_SX[i] == "1")
                 {
-                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对所有部门有效", ZDXB_ID[i] });
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对所有部门有效", ZDXB_BZ[i], ZDXB_ID[i] });
                 }else
                 {
-                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对指定部门有效", ZDXB_ID[i] });
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对指定部门有效", ZDXB_BZ[i], ZDXB_ID[i] });
                 }
 
             }

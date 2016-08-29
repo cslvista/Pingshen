@@ -38,9 +38,9 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(148, 152);
+            this.button1.Location = new System.Drawing.Point(178, 150);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(121, 47);
+            this.button1.Size = new System.Drawing.Size(92, 47);
             this.button1.TabIndex = 59;
             this.button1.Text = "保存";
             this.button1.UseVisualStyleBackColor = true;
@@ -86,7 +86,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(422, 235);
+            this.ClientSize = new System.Drawing.Size(434, 218);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.textBox2);

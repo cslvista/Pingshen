@@ -36,6 +36,7 @@
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn10 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -56,7 +57,6 @@
             this.ClassAlterT = new System.Windows.Forms.ToolStripButton();
             this.ProjectAddT = new System.Windows.Forms.ToolStripButton();
             this.ProjectAlterT = new System.Windows.Forms.ToolStripButton();
-            this.gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
@@ -129,7 +129,7 @@
             this.gridView1.OptionsFind.FindDelay = 300;
             this.gridView1.OptionsView.ShowGroupPanel = false;
             this.gridView1.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
-            new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.gridColumn3, DevExpress.Data.ColumnSortOrder.Ascending),
+            new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.gridColumn3, DevExpress.Data.ColumnSortOrder.Descending),
             new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.gridColumn1, DevExpress.Data.ColumnSortOrder.Ascending)});
             // 
             // gridColumn1
@@ -148,7 +148,16 @@
             this.gridColumn2.Name = "gridColumn2";
             this.gridColumn2.Visible = true;
             this.gridColumn2.VisibleIndex = 1;
-            this.gridColumn2.Width = 450;
+            this.gridColumn2.Width = 484;
+            // 
+            // gridColumn11
+            // 
+            this.gridColumn11.Caption = "项目备注";
+            this.gridColumn11.FieldName = "ZDXB_BZ";
+            this.gridColumn11.Name = "gridColumn11";
+            this.gridColumn11.Visible = true;
+            this.gridColumn11.VisibleIndex = 2;
+            this.gridColumn11.Width = 199;
             // 
             // gridColumn3
             // 
@@ -165,7 +174,7 @@
             this.gridColumn4.Name = "gridColumn4";
             this.gridColumn4.Visible = true;
             this.gridColumn4.VisibleIndex = 3;
-            this.gridColumn4.Width = 195;
+            this.gridColumn4.Width = 180;
             // 
             // gridColumn10
             // 
@@ -357,15 +366,6 @@
             this.ProjectAlterT.Size = new System.Drawing.Size(82, 27);
             this.ProjectAlterT.Text = "项目修改";
             this.ProjectAlterT.Click += new System.EventHandler(this.ProjectAlterT_Click);
-            // 
-            // gridColumn11
-            // 
-            this.gridColumn11.Caption = "项目备注";
-            this.gridColumn11.FieldName = "ZDXB_BZ";
-            this.gridColumn11.Name = "gridColumn11";
-            this.gridColumn11.Visible = true;
-            this.gridColumn11.VisibleIndex = 2;
-            this.gridColumn11.Width = 218;
             // 
             // ProjectStartup
             // 

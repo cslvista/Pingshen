@@ -60,7 +60,7 @@ namespace Evaluate
         private void Startup_Load(object sender, EventArgs e)
         {
             conn.ConnectionString = common.Database.conn;
-
+            导出ToolStripMenuItem.Enabled = false;
             ClassDisplay.Columns.Add("ZDZB_ZT", typeof(string));
             ClassDisplay.Columns.Add("ZDZB_TITLE", typeof(string));
             ClassDisplay.Columns.Add("ZDZB_BZ", typeof(string));
@@ -254,6 +254,7 @@ namespace Evaluate
             this.Invoke(new UpdateUI(delegate () 
             {
                 gridControl2.DataSource = PingshenDisplay;
+                导出ToolStripMenuItem.Enabled = Enabled;                
             }));
             t1_flag = 0;//线程结束标志
         }
@@ -313,24 +314,26 @@ namespace Evaluate
                 StringBuilder tempStr = new StringBuilder();
 
                 str.Length = 0;
-                str.Append("评审类别" + "\t" + "部门名称" + "\t" + "部门地点" + "\t" + "项目编号" + "\t" + "项目内容" + "\t" + "评分" + "\t" + "备注");
+                str.Append("评审类别" + "\t" + "部门名称" + "\t" + "部门地点" + "\t" + "项目编号" + "\t" + "项目内容" + "\t" + "评分" + "\t" + "备注" + "\t"+ "评审日期");
                 sw.WriteLine(str);
 
                 for (int i = 0; i < PingshenDisplay.Rows.Count; i++)
                 {
 
-                    for (int j = 0; j < 7; j++)
+                    for (int j = 0; j < 8; j++)
                     {
-                        if (j > 0)
+                        tempStr.Append("\t");
+                        switch (j)
                         {
-                            tempStr.Append("\t");
-                            tempStr.Append(PingshenDisplay.Rows[i][j]);
-                        }
-                        else
-                        {
-                            tempStr.Length = 0;
-                            tempStr.Append(SelectClass);
-                        }                      
+                            case 0: tempStr.Length = 0; tempStr.Append(SelectClass);break;
+                            case 1: tempStr.Append(PingshenDisplay.Rows[i][0]); break;
+                            case 2: tempStr.Append(PingshenDisplay.Rows[i][1]); break;
+                            case 3: tempStr.Append(PingshenDisplay.Rows[i][5]); break;
+                            case 4: tempStr.Append(PingshenDisplay.Rows[i][6]); break;
+                            case 5: tempStr.Append(PingshenDisplay.Rows[i][3]); break;
+                            case 6: tempStr.Append(PingshenDisplay.Rows[i][4]); break;
+                            case 7: tempStr.Append(PingshenDisplay.Rows[i][2]); break;
+                        }                  
                     }
                     sw.WriteLine(tempStr);
                 }

@@ -34,8 +34,33 @@ namespace Department
             string BMMC= textBox1.Text.Trim();//评审项目，输入过滤
             string BMDD = textBox2.Text.Trim();//备注，输入过滤
             string BMID = "";
-            //2.写入数据库
-            //2.1 写入部门表
+            //2.查询是否有相同的项目
+            try
+            {
+                string sql = String.Format("select top 1 ZDBM_ID from Y_ZDBM where ZDBM_MC='{0}' and ZDBM_DD='{1}'", BMMC, BMDD);
+                SqlCommand comm = new SqlCommand(sql, conn);
+                conn.Open();
+                SqlDataReader readData = comm.ExecuteReader();
+                if (readData.HasRows)
+                {
+                    MessageBox.Show("该部门已经存在，无需重复添加！");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+                
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+
+            //3.写入数据库
+            //3.1 写入部门表
             try
             {
                 string sql = String.Format("insert into Y_ZDBM (ZDBM_MC,ZDBM_DD,ZDMB_ZT) values('{0}','{1}','{2}')", BMMC, BMDD, "1");
@@ -52,8 +77,7 @@ namespace Department
             {
                 conn.Close();
             }
-            //2.2 查询新增项的ID
-
+            //3.2 查询新增项的ID
             try
             {
                 string sql = String.Format("select ZDBM_ID from Y_ZDBM where ZDBM_MC='{0}' and ZDBM_DD='{1}'", BMMC,BMDD);              
@@ -76,7 +100,7 @@ namespace Department
                 conn.Close();
             }
             
-            //3.显示到主窗体的列表中
+            //4.显示到主窗体的列表中
             DepartmentStartup f1 = (DepartmentStartup)this.Owner;
             f1.BMDisplay.Rows.Add(new object[] { "存在", BMMC, BMDD, DateTime.Now.ToString(), BMID });
             f1.gridControl2.DataSource = f1.BMDisplay;

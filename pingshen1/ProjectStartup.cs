@@ -48,6 +48,7 @@ namespace pingshen1
         public StringBuilder SelectBH = new StringBuilder();//单击项目编号
         public StringBuilder SelectNAME = new StringBuilder();//单击项目内容
         public StringBuilder SelectSX = new StringBuilder();//单击项目属性
+        public StringBuilder SelectBZ = new StringBuilder();//单击项目备注
         public StringBuilder SelectDate = new StringBuilder();//单击项目日期
         public StringBuilder SelectID = new StringBuilder();//单击项目日期
         public int SelectProjectI=0;//单击项目的行数
@@ -88,6 +89,7 @@ namespace pingshen1
             //绑定项目列名
             ProjectDisplay.Columns.Add("ZDXB_BH", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_NAME", typeof(string));
+            ProjectDisplay.Columns.Add("ZDXB_BZ", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_SX", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_DATE", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_ID", typeof(string));
@@ -283,11 +285,11 @@ namespace pingshen1
             {
                 if (ZDXB_SX[i] == "1")
                 {
-                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对所有部门有效", ZDXB_DATE[i], ZDXB_ID[i] });
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], ZDXB_BZ[i], "对所有部门有效", ZDXB_DATE[i], ZDXB_ID[i] });
                 }
                 else
                 {
-                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对指定部门有效", ZDXB_DATE[i], ZDXB_ID[i] });
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], ZDXB_BZ[i], "对指定部门有效", ZDXB_DATE[i], ZDXB_ID[i] });
                 }
 
             }
@@ -309,12 +311,14 @@ namespace pingshen1
                 SelectBH.Length = 0;
                 SelectNAME.Length = 0;
                 SelectSX.Length = 0;
+                SelectBZ.Length = 0;
                 SelectDate.Length = 0;
                 SelectID.Length = 0;
                 try //单击到分组的时候会出错
                 {
                     SelectBH.Append(gridView1.GetFocusedRowCellValue("ZDXB_BH").ToString());
                     SelectNAME.Append(gridView1.GetFocusedRowCellValue("ZDXB_NAME").ToString());
+                    SelectBZ.Append(gridView1.GetFocusedRowCellValue("ZDXB_BZ").ToString());
                     SelectSX.Append(gridView1.GetFocusedRowCellValue("ZDXB_SX").ToString());
                     SelectDate.Append(gridView1.GetFocusedRowCellValue("ZDXB_DATE").ToString());
                     SelectID.Append(gridView1.GetFocusedRowCellValue("ZDXB_ID").ToString());
@@ -448,6 +452,7 @@ namespace pingshen1
             frm.SelectBH = SelectBH;
             frm.SelectNAME = SelectNAME;
             frm.SelectSX = SelectSX;
+            frm.SelectBZ = SelectBZ;
             frm.SelectDate = SelectDate;
             frm.SelectID = SelectID;
             frm.SelectProjectI = gridView1.GetDataSourceRowIndex(gridView1.FocusedRowHandle);

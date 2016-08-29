@@ -24,6 +24,7 @@ namespace Department
         List<string> ZDXB_ID = new List<string>();//项目ID
         List<string> ZDXB_BH = new List<string>();//项目编号
         List<string> ZDXB_NAME = new List<string>();//项目内容
+        List<string> ZDXB_BZ = new List<string>();//项目备注
 
         List<string> ZDBM_ID = new List<string>();//部门名称
         List<string> ZDBM_MC = new List<string>();//部门状态
@@ -35,6 +36,7 @@ namespace Department
         StringBuilder SelectZDXB_ID = new StringBuilder();//单击GridControl1选中的项目ID
         StringBuilder SelectZDXB_BH = new StringBuilder();//单击GridControl1选中的项目编号
         StringBuilder SelectZDXB_NAME = new StringBuilder();//单击GridControl1选中的项目内容 
+        StringBuilder SelectZDXB_BZ = new StringBuilder();//单击GridControl1选中的项目备注
 
         StringBuilder SelectZDBM_ID2 = new StringBuilder();//单击GridControl2选中的部门ID
         StringBuilder SelectZDBM_MC2 = new StringBuilder();//单击GridControl2选中的部门名称   
@@ -72,7 +74,8 @@ namespace Department
             ProjectDisplay.Columns.Add("ZDXB_BH", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_NAME", typeof(string));
             ProjectDisplay.Columns.Add("ZDXB_ID", typeof(string));
-           
+            ProjectDisplay.Columns.Add("ZDXB_BZ", typeof(string));
+
             BMDisplay.Columns.Add("ZDBM_MC", typeof(string));
             BMDisplay.Columns.Add("ZDBM_DD", typeof(string));
             BMDisplay.Columns.Add("ZDBM_ID", typeof(string));
@@ -253,12 +256,12 @@ namespace Department
             ZDXB_ID.Clear();
             ZDXB_BH.Clear();
             ZDXB_NAME.Clear();
-
+            ZDXB_BZ.Clear();
             //查找该细表中所有的项目
             try
             {
                 string sql = String.Format(
-             "select ZDXB_ID,ZDXB_BH,ZDXB_NAME from Y_ZDXB where ZDXB_SX='0' and ZDZB_ID='{0}'", SelectZDZB_ID);
+             "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_BZ from Y_ZDXB where ZDXB_SX='0' and ZDZB_ID='{0}'", SelectZDZB_ID);
                 SqlCommand comm = new SqlCommand(sql, conn);
                 conn.Open();
                 SqlDataReader readData = comm.ExecuteReader();
@@ -269,6 +272,7 @@ namespace Department
                         ZDXB_ID.Add(readData[0].ToString());
                         ZDXB_BH.Add(readData[1].ToString());
                         ZDXB_NAME.Add(readData[2].ToString());
+                        ZDXB_BZ.Add(readData[3].ToString());
                     }
                 }
 
@@ -285,7 +289,7 @@ namespace Department
             }
             for (int i=0;i< ZDXB_ID.Count;i++)
             {
-                ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i],  ZDXB_ID[i] });
+                ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i],  ZDXB_ID[i], ZDXB_BZ[i] });
             }
             this.Invoke(new UpdateUI(delegate ()
             {
@@ -298,7 +302,7 @@ namespace Department
         {
 
             ProjectDisplay.Clear();
-            ProjectDisplay.Rows.Add(new object[] { SelectZDXB_BH, SelectZDXB_NAME, SelectZDXB_ID });
+            ProjectDisplay.Rows.Add(new object[] { SelectZDXB_BH, SelectZDXB_NAME, SelectZDXB_ID,SelectZDXB_BZ});
             
         }
 
@@ -307,11 +311,13 @@ namespace Department
             SelectZDXB_ID.Length = 0;
             SelectZDXB_BH.Length = 0;
             SelectZDXB_NAME.Length = 0;
+            SelectZDXB_BZ.Length = 0;
             try //单击到状态行的时候，会出错，因此要catch
             {
                 SelectZDXB_ID.Append(gridView1.GetFocusedRowCellValue("ZDXB_ID").ToString());
                 SelectZDXB_BH.Append(gridView1.GetFocusedRowCellValue("ZDXB_BH").ToString());
                 SelectZDXB_NAME.Append(gridView1.GetFocusedRowCellValue("ZDXB_NAME").ToString());
+                SelectZDXB_BZ.Append(gridView1.GetFocusedRowCellValue("ZDXB_BZ").ToString());
                 SelectGridControl1_I = gridView1.GetDataSourceRowIndex(gridView1.FocusedRowHandle); 
             }
             catch
@@ -401,15 +407,14 @@ namespace Department
                 }
             }
                       
-            //2.清空界面
+            //2.清空界面            
+            //重新添加项目列表
             ProjectDisplay.Clear();
-            BMAdd.Clear();
-            //重新添加部门列表
-            gridControl2.DataSource = null;
-            BMDisplay.Clear();
-            Thread t2 = new Thread(WriteGridControl2);//将部门信息显示到GridControl2上          
-            t2.IsBackground = true;
-            t2.Start();
+            for (int i = 0; i < ZDXB_ID.Count; i++)
+            {
+                ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], ZDXB_ID[i] });
+            }
+
             MessageBox.Show("添加成功！");
         }
 
@@ -457,6 +462,25 @@ namespace Department
         {
             //标题：全部删除
             BMAdd.Clear();
+            BMDisplay.Clear();
+            for (int i = 0; i < ZDBM_ID.Count; i++)
+            {
+                BMDisplay.Rows.Add(new object[] { ZDBM_MC[i], ZDBM_DD[i], ZDBM_ID[i] });
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //标题：全部添加
+            int Rows = gridView2.RowCount;//过程中会动态变化
+            for (int i = 0; i < Rows; i++)
+            {
+                DataRow dr = gridView2.GetDataRow(0);
+                BMAdd.Rows.Add(new object[] {dr[0].ToString(), dr[1].ToString(), dr[2].ToString()});
+                BMDisplay.Rows.RemoveAt(gridView2.GetDataSourceRowIndex(0));
+            }
+            gridControl3.DataSource = BMAdd;
         }
     }
 }

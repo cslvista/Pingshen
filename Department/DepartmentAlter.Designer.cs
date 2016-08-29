@@ -44,7 +44,7 @@
             this.button1.Location = new System.Drawing.Point(176, 190);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 48);
+            this.button1.Size = new System.Drawing.Size(112, 43);
             this.button1.TabIndex = 64;
             this.button1.Text = "保存";
             this.button1.UseVisualStyleBackColor = true;

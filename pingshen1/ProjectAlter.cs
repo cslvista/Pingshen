@@ -18,6 +18,7 @@ namespace pingshen1
         public StringBuilder SelectBH = new StringBuilder();//单击项目编号
         public StringBuilder SelectNAME = new StringBuilder();//单击项目内容
         public StringBuilder SelectSX = new StringBuilder();//单击项目属性
+        public StringBuilder SelectBZ = new StringBuilder();//单击项目备注
         public StringBuilder SelectDate = new StringBuilder();//单击项目日期
         public StringBuilder SelectID = new StringBuilder();//单击项目ID
         StringBuilder sql = new StringBuilder();
@@ -36,10 +37,13 @@ namespace pingshen1
                 checkBox2.Checked = false;               
                 textBox1.ReadOnly = true;
                 textBox2.ReadOnly = true;
-            }else
+                textBox3.ReadOnly = true;
+            }
+            else
             {
                 textBox1.ReadOnly = false;
                 textBox2.ReadOnly = false;
+                textBox3.ReadOnly = false;
             }
         }
 
@@ -54,13 +58,14 @@ namespace pingshen1
             }
             string XMBH = textBox1.Text.Trim();//项目编号，输入过滤
             string XMNR= textBox2.Text.Trim();//项目内容，输入过滤
+            string XMBZ = textBox3.Text.Trim();//项目备注，输入过滤
 
             //2.根据状态变更构建SQL语句
             sql.Length = 0;
 
             if (checkBox1.Checked == false && checkBox2.Checked == false)//纯更新
             {
-                sql.Append( String.Format("update Y_ZDXB set ZDXB_BH='{0}',ZDXB_NAME='{1}' where ZDXB_ID='{2}'", XMBH, XMNR, SelectID));
+                sql.Append( String.Format("update Y_ZDXB set ZDXB_BH='{0}',ZDXB_NAME='{1}',ZDXB_BZ='{2}' where ZDXB_ID='{3}'", XMBH, XMNR, XMBZ,SelectID));
                 
             }
             else if (checkBox1.Checked == true)//删除
@@ -79,11 +84,11 @@ namespace pingshen1
             {
                 if (SelectSX.ToString() == "对所有部门有效")
                 {
-                    sql.Append(String.Format("update Y_ZDXB set ZDXB_BH='{0}',ZDXB_NAME='{1}',ZDXB_SX='0' where ZDXB_ID='{2}'", XMBH, XMNR, SelectID));                   
+                    sql.Append(String.Format("update Y_ZDXB set ZDXB_BH='{0}',ZDXB_NAME='{1}',ZDXB_BZ='{2}',ZDXB_SX='0' where ZDXB_ID='{3}'", XMBH, XMNR, XMBZ,SelectID));                   
                 }
                 else
                 {
-                    sql.Append(String.Format("update Y_ZDXB set ZDXB_BH='{0}',ZDXB_NAME='{1}',ZDXB_SX='1' where ZDXB_ID='{2}';", XMBH, XMNR, SelectID)
+                    sql.Append(String.Format("update Y_ZDXB set ZDXB_BH='{0}',ZDXB_NAME='{1}',ZDXB_BZ='{2}',ZDXB_SX='1' where ZDXB_ID='{3}';", XMBH, XMNR, XMBZ,SelectID)
                              + String.Format("delete from Y_ZDZBBMGX where ZDXB_ID='{0}'", SelectID));
                 }
             }
@@ -114,6 +119,7 @@ namespace pingshen1
             {
                 f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_BH"] = XMBH;
                 f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_NAME"] = XMNR;
+                f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_BZ"] = XMBZ;
             }
             else if (checkBox1.Checked == true)//删除
             {
@@ -123,9 +129,10 @@ namespace pingshen1
             {
                 f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_BH"] = XMBH;
                 f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_NAME"] = XMNR;
+                f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_BZ"] = XMBZ;
                 if (SelectSX.ToString() == "对所有部门有效")
                 {
-                    f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_SX"] = "对部分部门有效";
+                    f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_SX"] = "对指定部门有效";
                 }
                 else
                 {
@@ -144,15 +151,16 @@ namespace pingshen1
             label5.Text = "评审类别: " +SelectClass.ToString();
             textBox1.Text = SelectBH.ToString();
             textBox2.Text = SelectNAME.ToString();
+            textBox3.Text = SelectBZ.ToString();
             label4.Text = "创建日期: "+ SelectDate.ToString();
             if (SelectSX.ToString() == "对所有部门有效")
             {
-                label1.Text = "项目属性： 对所有部门有效";
-                checkBox2.Text = "变更为对部分部门有效";
+                label1.Text = "项目属性：对所有部门有效";
+                checkBox2.Text = "变更为对指定部门有效";
             }
             else
             {
-                label1.Text = "项目属性： 对部分部门有效";
+                label1.Text = "项目属性：对指定部门有效";
                 checkBox2.Text = "变更为对所有部门有效";
             }
         }

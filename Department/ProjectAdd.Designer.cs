@@ -58,6 +58,8 @@
             this.gridColumn9 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn12 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn10 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -78,7 +80,7 @@
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(545, 666);
+            this.gridControl1.Size = new System.Drawing.Size(590, 738);
             this.gridControl1.TabIndex = 16;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -95,6 +97,7 @@
             this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.gridColumn1,
             this.gridColumn2,
+            this.gridColumn4,
             this.gridColumn3,
             this.gridColumn11});
             this.gridView1.GridControl = this.gridControl1;
@@ -224,16 +227,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1182, 794);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1272, 866);
             this.tableLayoutPanel1.TabIndex = 17;
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.button3);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(634, 3);
+            this.panel2.Location = new System.Drawing.Point(679, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(545, 64);
+            this.panel2.Size = new System.Drawing.Size(590, 64);
             this.panel2.TabIndex = 19;
             // 
             // panel3
@@ -243,7 +246,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(3, 3);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(545, 64);
+            this.panel3.Size = new System.Drawing.Size(590, 64);
             this.panel3.TabIndex = 20;
             // 
             // panel4
@@ -253,7 +256,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 73);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(545, 44);
+            this.panel4.Size = new System.Drawing.Size(590, 44);
             this.panel4.TabIndex = 21;
             // 
             // label5
@@ -285,9 +288,9 @@
             this.panel5.Controls.Add(this.button4);
             this.panel5.Controls.Add(this.button2);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel5.Location = new System.Drawing.Point(554, 123);
+            this.panel5.Location = new System.Drawing.Point(599, 123);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(74, 668);
+            this.panel5.Size = new System.Drawing.Size(74, 740);
             this.panel5.TabIndex = 22;
             // 
             // button5
@@ -298,7 +301,7 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(73, 41);
             this.button5.TabIndex = 4;
-            this.button5.Text = "<<清空";
+            this.button5.Text = "<<全部移除";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
@@ -317,11 +320,11 @@
             // 
             this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gridControl2.Location = new System.Drawing.Point(634, 124);
+            this.gridControl2.Location = new System.Drawing.Point(679, 124);
             this.gridControl2.MainView = this.gridView2;
             this.gridControl2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gridControl2.Name = "gridControl2";
-            this.gridControl2.Size = new System.Drawing.Size(545, 666);
+            this.gridControl2.Size = new System.Drawing.Size(590, 738);
             this.gridControl2.TabIndex = 17;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2});
@@ -339,6 +342,7 @@
             this.gridColumn5,
             this.gridColumn6,
             this.gridColumn7,
+            this.gridColumn10,
             this.gridColumn8,
             this.gridColumn9,
             this.gridColumn12});
@@ -402,16 +406,32 @@
             // 
             this.panel6.Controls.Add(this.label1);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(634, 73);
+            this.panel6.Location = new System.Drawing.Point(679, 73);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(545, 44);
+            this.panel6.Size = new System.Drawing.Size(590, 44);
             this.panel6.TabIndex = 23;
+            // 
+            // gridColumn4
+            // 
+            this.gridColumn4.Caption = "项目备注";
+            this.gridColumn4.FieldName = "ZDXB_BZ";
+            this.gridColumn4.Name = "gridColumn4";
+            this.gridColumn4.Visible = true;
+            this.gridColumn4.VisibleIndex = 2;
+            // 
+            // gridColumn10
+            // 
+            this.gridColumn10.Caption = "项目备注";
+            this.gridColumn10.FieldName = "ZDXB_BZ";
+            this.gridColumn10.Name = "gridColumn10";
+            this.gridColumn10.Visible = true;
+            this.gridColumn10.VisibleIndex = 2;
             // 
             // ProjectAdd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1182, 794);
+            this.ClientSize = new System.Drawing.Size(1272, 866);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ForeColor = System.Drawing.Color.Black;
@@ -467,5 +487,7 @@
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button5;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn4;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn10;
     }
 }
