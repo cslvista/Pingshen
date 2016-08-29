@@ -101,27 +101,27 @@
             this.部门修改ToolStripMenuItem,
             this.项目新增ToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(145, 82);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 82);
             // 
             // 部门新增ToolStripMenuItem
             // 
             this.部门新增ToolStripMenuItem.Name = "部门新增ToolStripMenuItem";
-            this.部门新增ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.部门新增ToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
             this.部门新增ToolStripMenuItem.Text = "部门新增";
             this.部门新增ToolStripMenuItem.Click += new System.EventHandler(this.部门新增ToolStripMenuItem_Click);
             // 
             // 部门修改ToolStripMenuItem
             // 
             this.部门修改ToolStripMenuItem.Name = "部门修改ToolStripMenuItem";
-            this.部门修改ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.部门修改ToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
             this.部门修改ToolStripMenuItem.Text = "部门修改";
             this.部门修改ToolStripMenuItem.Click += new System.EventHandler(this.部门修改ToolStripMenuItem_Click);
             // 
             // 项目新增ToolStripMenuItem1
             // 
             this.项目新增ToolStripMenuItem1.Name = "项目新增ToolStripMenuItem1";
-            this.项目新增ToolStripMenuItem1.Size = new System.Drawing.Size(144, 26);
-            this.项目新增ToolStripMenuItem1.Text = "项目新增";
+            this.项目新增ToolStripMenuItem1.Size = new System.Drawing.Size(199, 26);
+            this.项目新增ToolStripMenuItem1.Text = "项目新增(单部门)";
             this.项目新增ToolStripMenuItem1.Click += new System.EventHandler(this.项目新增ToolStripMenuItem1_Click);
             // 
             // gridView2

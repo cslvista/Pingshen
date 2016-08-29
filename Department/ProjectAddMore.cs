@@ -482,5 +482,10 @@ namespace Department
             }
             gridControl3.DataSource = BMAdd;
         }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

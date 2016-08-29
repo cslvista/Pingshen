@@ -288,11 +288,17 @@ namespace Evaluate
         {
             search frm = new search();
             frm.StartPosition = FormStartPosition.CenterScreen;
-            frm.Show();
+            frm.Show(this);
         }
 
         private void 导出ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (gridView2.RowCount == 0)
+            {
+                MessageBox.Show("没有可导出的内容！");
+                return;
+            }
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "execl files (*.xlsx)|*.xlsx";
             saveFileDialog.FilterIndex = 0;

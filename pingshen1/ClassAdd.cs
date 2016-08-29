@@ -57,7 +57,7 @@ namespace pingshen1
             try
             {
                 string sql1 = String.Format("select ZDZB_ID from Y_ZDZB where ZDZB_TITLE='{0}'",TITLE);
-                
+              
                 SqlCommand comm = new SqlCommand(sql1, conn);
                 conn.Open();
                 SqlDataReader readData = comm.ExecuteReader();
