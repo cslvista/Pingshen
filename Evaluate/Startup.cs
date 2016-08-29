@@ -12,6 +12,9 @@ using System.Threading;
 using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+
+using System.IO;
+
 using pingshen1;
 using Department;
 
@@ -193,8 +196,8 @@ namespace Evaluate
             ZDXB_BH.Clear();
             ZDXB_NAME.Clear();
 
-            string time1 = String.Format("{0}-{1}-{2} 00:00:01.001", dateTimePicker1.Value.Year.ToString(), dateTimePicker1.Value.Month.ToString(), "1");
-            string time2 = String.Format("{0}-{1}-{2} 23:59:59.100", dateTimePicker1.Value.Year.ToString(), dateTimePicker1.Value.Month.ToString(), dateTimePicker1.Value.Day.ToString());
+            string time1 = String.Format("{0}-{1}-{2} 00:00:01.001", DateTime.Now.Year, DateTime.Now.Month-1, "1");
+            string time2 = String.Format("{0}-{1}-{2} 23:59:59.100", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
             string sql = String.Format("select b.ZDBM_MC,c.ZDBM_DD,b.PS_DATE,a.PX_PF,a.PX_BZ,a.ZDXB_BH,a.ZDXB_NAME from Y_PSMX a inner join  Y_PSZB b on a.PS_ID= b.PS_ID inner join  Y_ZDBM c on c.ZDBM_ID=a.ZDBM_ID where  b.ZDZB_ID='{0}'", SelectClassID)
                         +String.Format("and b.PS_DATE between '{0}' and '{1}'", time1, time2);
@@ -279,5 +282,69 @@ namespace Evaluate
             info.GroupText = "部门: " + gridView2.GetRowCellValue(index, "ZDBM_MC").ToString()
                 + "              评审日期:" + gridView2.GetRowCellValue(index, "PS_DATE").ToString();
         }
-    }
+
+        private void 更多查找ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            search frm = new search();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.Show();
+        }
+
+        private void 导出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "execl files (*.xlsx)|*.xlsx";
+            saveFileDialog.FilterIndex = 0;
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.CreatePrompt = true;
+            saveFileDialog.Title = "导出到Excel";
+            saveFileDialog.ShowDialog();
+            if (saveFileDialog.FileName == "")
+            {
+                return;
+            }
+
+            Stream myStream = saveFileDialog.OpenFile();
+            StreamWriter sw = new StreamWriter(myStream, System.Text.Encoding.GetEncoding(-0));
+            
+            try
+            {               
+                StringBuilder str = new StringBuilder();
+                StringBuilder tempStr = new StringBuilder();
+
+                str.Length = 0;
+                str.Append("评审类别" + "\t" + "部门名称" + "\t" + "部门地点" + "\t" + "项目编号" + "\t" + "项目内容" + "\t" + "评分" + "\t" + "备注");
+                sw.WriteLine(str);
+
+                for (int i = 0; i < PingshenDisplay.Rows.Count; i++)
+                {
+
+                    for (int j = 0; j < 7; j++)
+                    {
+                        if (j > 0)
+                        {
+                            tempStr.Append("\t");
+                            tempStr.Append(PingshenDisplay.Rows[i][j]);
+                        }
+                        else
+                        {
+                            tempStr.Length = 0;
+                            tempStr.Append(SelectClass);
+                        }                      
+                    }
+                    sw.WriteLine(tempStr);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                sw.Close();
+                myStream.Close();
+            }               
+
+     }
+  }
 }

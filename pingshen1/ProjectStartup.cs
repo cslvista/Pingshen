@@ -30,6 +30,7 @@ namespace pingshen1
         List<string> ZDXB_BH = new List<string>();
         List<string> ZDXB_NAME = new List<string>();
         List<string> ZDXB_SX = new List<string>();
+        List<string> ZDXB_BZ = new List<string>();
         List<string> ZDXB_DATE = new List<string>();
 
         private int t2_flag=0;//用于线程结束的判断
@@ -241,11 +242,12 @@ namespace pingshen1
             ZDXB_ID.Clear();
             ZDXB_BH.Clear();
             ZDXB_NAME.Clear();
+            ZDXB_BZ.Clear();
             ZDXB_SX.Clear();
             ZDXB_DATE.Clear();
             
             
-            string sql = String.Format("select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX,ZDXB_DATE from Y_ZDXB where ZDZB_ID='{0}'",SelectClassID);
+            string sql = String.Format("select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_BZ,ZDXB_SX,ZDXB_DATE from Y_ZDXB where ZDZB_ID='{0}'",SelectClassID);
             SqlCommand comm = new SqlCommand(sql, conn);
             try
             {
@@ -258,8 +260,9 @@ namespace pingshen1
                         ZDXB_ID.Add(readData[0].ToString());
                         ZDXB_BH.Add(readData[1].ToString());
                         ZDXB_NAME.Add(readData[2].ToString());
-                        ZDXB_SX.Add(readData[3].ToString());
-                        ZDXB_DATE.Add(readData[4].ToString());
+                        ZDXB_BZ.Add(readData[3].ToString());
+                        ZDXB_SX.Add(readData[4].ToString());
+                        ZDXB_DATE.Add(readData[5].ToString());
                     }
                 }
 
@@ -284,7 +287,7 @@ namespace pingshen1
                 }
                 else
                 {
-                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对部分部门有效", ZDXB_DATE[i], ZDXB_ID[i] });
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对指定部门有效", ZDXB_DATE[i], ZDXB_ID[i] });
                 }
 
             }

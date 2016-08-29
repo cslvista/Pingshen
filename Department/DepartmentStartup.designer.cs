@@ -64,6 +64,7 @@
             this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
@@ -382,6 +383,7 @@
             this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.gridColumn1,
             this.gridColumn2,
+            this.gridColumn4,
             this.gridColumn3,
             this.gridColumn11});
             this.gridView1.GridControl = this.gridControl1;
@@ -402,7 +404,7 @@
             this.gridColumn1.Name = "gridColumn1";
             this.gridColumn1.Visible = true;
             this.gridColumn1.VisibleIndex = 0;
-            this.gridColumn1.Width = 150;
+            this.gridColumn1.Width = 175;
             // 
             // gridColumn2
             // 
@@ -411,7 +413,7 @@
             this.gridColumn2.Name = "gridColumn2";
             this.gridColumn2.Visible = true;
             this.gridColumn2.VisibleIndex = 1;
-            this.gridColumn2.Width = 700;
+            this.gridColumn2.Width = 546;
             // 
             // gridColumn3
             // 
@@ -436,6 +438,15 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1101, 54);
             this.panel1.TabIndex = 22;
+            // 
+            // gridColumn4
+            // 
+            this.gridColumn4.Caption = "项目备注";
+            this.gridColumn4.FieldName = "ZDXB_BZ";
+            this.gridColumn4.Name = "gridColumn4";
+            this.gridColumn4.Visible = true;
+            this.gridColumn4.VisibleIndex = 2;
+            this.gridColumn4.Width = 360;
             // 
             // DepartmentStartup
             // 
@@ -500,5 +511,6 @@
         private System.Windows.Forms.ToolStripMenuItem 项目新增单ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 项目新增多ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 项目删除ToolStripMenuItem;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn4;
     }
 }

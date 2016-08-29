@@ -28,9 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
             this.选中ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -51,6 +50,8 @@
             this.gridColumn12 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn14 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -324,6 +325,8 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.button5);
+            this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.button3);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -331,6 +334,25 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(74, 769);
             this.panel2.TabIndex = 19;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(3, 447);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(68, 42);
+            this.button5.TabIndex = 28;
+            this.button5.Text = "<<全部删除";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(3, 381);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(68, 42);
+            this.button2.TabIndex = 27;
+            this.button2.Text = "全部添加>>";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // button4
             // 
@@ -463,5 +485,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button2;
     }
 }

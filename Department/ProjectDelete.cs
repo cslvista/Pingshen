@@ -37,8 +37,8 @@ namespace Department
             label6.Text = "部门地点： "+BMDD;
             label2.Text = "评审类别： "+PSLB;
             label3.Text = "项目编号： "+XMBH;
-            label4.Text = "项目内容： "+XMNR;
-             label5.Text = "项目属性： 对部分部门有效"  ;
+            textBox1.Text = XMNR;
+            label5.Text = "项目属性： 对部分部门有效"  ;
 
         }
 

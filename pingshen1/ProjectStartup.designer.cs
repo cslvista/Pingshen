@@ -28,10 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectStartup));
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
-            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip();
             this.项目新增ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.项目修改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -41,7 +40,7 @@
             this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn10 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridControl2 = new DevExpress.XtraGrid.GridControl();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
             this.项目新增ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.评审类别修改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.评审类别新增ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +56,7 @@
             this.ClassAlterT = new System.Windows.Forms.ToolStripButton();
             this.ProjectAddT = new System.Windows.Forms.ToolStripButton();
             this.ProjectAlterT = new System.Windows.Forms.ToolStripButton();
+            this.gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
@@ -117,6 +117,7 @@
             this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.gridColumn1,
             this.gridColumn2,
+            this.gridColumn11,
             this.gridColumn3,
             this.gridColumn4,
             this.gridColumn10});
@@ -138,7 +139,7 @@
             this.gridColumn1.Name = "gridColumn1";
             this.gridColumn1.Visible = true;
             this.gridColumn1.VisibleIndex = 0;
-            this.gridColumn1.Width = 160;
+            this.gridColumn1.Width = 138;
             // 
             // gridColumn2
             // 
@@ -147,7 +148,7 @@
             this.gridColumn2.Name = "gridColumn2";
             this.gridColumn2.Visible = true;
             this.gridColumn2.VisibleIndex = 1;
-            this.gridColumn2.Width = 650;
+            this.gridColumn2.Width = 450;
             // 
             // gridColumn3
             // 
@@ -163,8 +164,8 @@
             this.gridColumn4.FieldName = "ZDXB_DATE";
             this.gridColumn4.Name = "gridColumn4";
             this.gridColumn4.Visible = true;
-            this.gridColumn4.VisibleIndex = 2;
-            this.gridColumn4.Width = 274;
+            this.gridColumn4.VisibleIndex = 3;
+            this.gridColumn4.Width = 195;
             // 
             // gridColumn10
             // 
@@ -357,6 +358,15 @@
             this.ProjectAlterT.Text = "项目修改";
             this.ProjectAlterT.Click += new System.EventHandler(this.ProjectAlterT_Click);
             // 
+            // gridColumn11
+            // 
+            this.gridColumn11.Caption = "项目备注";
+            this.gridColumn11.FieldName = "ZDXB_BZ";
+            this.gridColumn11.Name = "gridColumn11";
+            this.gridColumn11.Visible = true;
+            this.gridColumn11.VisibleIndex = 2;
+            this.gridColumn11.Width = 218;
+            // 
             // ProjectStartup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -410,5 +420,6 @@
         private System.Windows.Forms.ToolStripButton ClassAlterT;
         private System.Windows.Forms.ToolStripButton ProjectAddT;
         private System.Windows.Forms.ToolStripButton ProjectAlterT;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn11;
     }
 }

@@ -34,8 +34,12 @@ namespace pingshen1
             //写入数据库
             try
             {
-                string sql = String.Format("insert into Y_ZDZB (ZDZB_TITLE,ZDZB_BZ,ZDZB_ZT) values('{0}','{1}','{2}')", TITLE, BZ, "1");
+                string sql = "insert into Y_ZDZB (ZDZB_TITLE,ZDZB_BZ,ZDZB_ZT) values(@ZDZB_TITLE,@ZDZB_BZ,'1')";                
                 SqlCommand comm = new SqlCommand(sql, conn);
+                comm.Parameters.Add("@ZDZB_TITLE", SqlDbType.NChar);
+                comm.Parameters.Add("@ZDZB_BZ", SqlDbType.NChar);
+                comm.Parameters["@ZDZB_TITLE"].Value = TITLE;
+                comm.Parameters["@ZDZB_BZ"].Value = BZ;
                 conn.Open();
                 comm.ExecuteNonQuery();
             }

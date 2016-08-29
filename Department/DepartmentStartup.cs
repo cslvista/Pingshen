@@ -506,7 +506,7 @@ namespace Department
                     ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对所有部门有效", ZDXB_ID[i] });
                 }else
                 {
-                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对部分部门有效", ZDXB_ID[i] });
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], "对指定部门有效", ZDXB_ID[i] });
                 }
 
             }

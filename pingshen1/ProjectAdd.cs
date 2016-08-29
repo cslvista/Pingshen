@@ -42,6 +42,7 @@ namespace pingshen1
             }
             string XMBH = textBox1.Text.Trim();
             string XMNR = textBox2.Text.Trim();
+            string XMBZ = textBox3.Text.Trim();
             string SX_ZT;
             string SX;
             if (checkBox2.Checked == true)//判断是否全部科室有效
@@ -57,8 +58,19 @@ namespace pingshen1
             //2.写入评审细表
             try
             {
-                string sql = String.Format("insert into Y_ZDXB (ZDZB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX) values('{0}','{1}','{2}','{3}')", SelectClassID, XMBH, XMNR, SX_ZT);
+                string sql = "insert into Y_ZDXB (ZDZB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX,ZDXB_BZ) values(@ZDZB_ID,@ZDXB_BH,@ZDXB_NAME,@ZDXB_SX,@ZDXB_BZ)";
                 SqlCommand comm = new SqlCommand(sql, conn);
+                comm.Parameters.Add("@ZDZB_ID", SqlDbType.NChar);
+                comm.Parameters.Add("@ZDXB_BH", SqlDbType.NChar);
+                comm.Parameters.Add("@ZDXB_NAME", SqlDbType.NChar);
+                comm.Parameters.Add("@ZDXB_SX", SqlDbType.NChar);
+                comm.Parameters.Add("@ZDXB_BZ", SqlDbType.NChar);
+                comm.Parameters["@ZDZB_ID"].Value = SelectClassID;
+                comm.Parameters["@ZDXB_BH"].Value = XMBH;
+                comm.Parameters["@ZDXB_NAME"].Value = XMNR;
+                comm.Parameters["@ZDXB_SX"].Value = SX_ZT;
+                comm.Parameters["@ZDXB_BZ"].Value = XMBZ;
+
                 conn.Open();
                 comm.ExecuteNonQuery();
             }
@@ -74,10 +86,11 @@ namespace pingshen1
             
             //4.将数据添加到原窗体的表格中
             ProjectStartup f1 = (ProjectStartup)this.Owner;
-            f1.ProjectDisplay.Rows.Add(new object[] {textBox1.Text, textBox2.Text, SX, DateTime.Now.ToString()});                   
+            f1.ProjectDisplay.Rows.Add(new object[] {XMBH, XMNR, SX, DateTime.Now.ToString()});                   
             f1.gridControl1.DataSource = f1.ProjectDisplay;
             textBox1.Text = "";
             textBox2.Text = "";
+            textBox3.Text = "";
             checkBox2.Checked = false;
             MessageBox.Show("添加成功");
             

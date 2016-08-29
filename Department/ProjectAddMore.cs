@@ -51,8 +51,7 @@ namespace Department
         string rec_combobox1;//记录combobox1的数据，用于多线程
         int t1_flag = 0;//用于combobox1变更时多线程状态的判断
 
-        StringBuilder sql1 = new StringBuilder();
-
+      
         DataTable ProjectDisplay = new DataTable();//评审项目
         DataTable BMDisplay = new DataTable();//部门列表
         DataTable BMAdd = new DataTable();//添加的部门列表
@@ -185,10 +184,11 @@ namespace Department
                 MessageBox.Show("请先选择评审项目!");
                 return;
             }
+
             //2.在数据库中查找是否已经添加
             try
             {
-                string sql = String.Format("select top 1 ZDBM_ID from Y_ZDZBBMGX where ZDBM_ID='{0}' and ZDXB_ID='{1}'", SelectZDBM_ID2 ,ProjectDisplay.Rows[0][2].ToString());
+                string sql = String.Format("select top 1 ZDBM_ID from Y_ZDZBBMGX where ZDBM_ID='{0}' and ZDXB_ID='{1}'", SelectZDBM_ID2, ProjectDisplay.Rows[0][2].ToString());
                 conn.Open();
                 SqlCommand comm = new SqlCommand(sql, conn);
                 SqlDataReader readData = comm.ExecuteReader();
@@ -342,34 +342,65 @@ namespace Department
         {
             //标题：提交
 
+            if (gridView1.RowCount != 1)
+            {
+                MessageBox.Show("请选中项目！");
+                return;
+            }
+
             if (gridView3.RowCount == 0)
             {
                 MessageBox.Show("请添加部门！");
                 return;
             }
+            StringBuilder sql = new StringBuilder();
 
-            //1.添加到"部门与评审项目的关系表"          
-            try
+            //1.添加到"部门与评审项目的关系表" 
+            for (int i = 0; i < BMAdd.Rows.Count; i++)
             {
-                sql1.Length = 0;
-                for (int i = 0; i < BMAdd.Rows.Count; i++)
+                //1.1先判断是否已经添加
+                try
                 {
-                    sql1.Append(String.Format("insert into Y_ZDZBBMGX (ZDBM_ID,ZDZB_ID,ZDXB_ID) values('{0}','{1}','{2}');",  BMAdd.Rows[i][2].ToString(), SelectZDZB_ID, SelectZDXB_ID));
+                    sql.Length = 0;
+                    sql.Append( String.Format("select top 1 ZDBM_ID from Y_ZDZBBMGX where ZDBM_ID='{0}' and ZDXB_ID='{1}'", BMAdd.Rows[i][2], SelectZDXB_ID));
+                    conn.Open();
+                    SqlCommand comm = new SqlCommand(sql.ToString(), conn);
+                    SqlDataReader readData = comm.ExecuteReader();
+                    if (readData.HasRows)
+                    {
+                        continue;
+                    }
                 }
-                SqlCommand comm = new SqlCommand(sql1.ToString(), conn);
-                conn.Open();
-                comm.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            finally
-            {
-                conn.Close();
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("查询错误："+ex.Message);
+                    return;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                //1.2 没有添加时就可以添加
+                try
+                {
+                    sql.Length = 0;
+                    sql.Append(String.Format("insert into Y_ZDZBBMGX (ZDBM_ID,ZDZB_ID,ZDXB_ID) values('{0}','{1}','{2}');", BMAdd.Rows[i][2], SelectZDZB_ID, SelectZDXB_ID));
 
+                    SqlCommand comm = new SqlCommand(sql.ToString(), conn);
+                    conn.Open();
+                    comm.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("写入错误："+ex.Message);
+                    return;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+                      
             //2.清空界面
             ProjectDisplay.Clear();
             BMAdd.Clear();
@@ -422,5 +453,10 @@ namespace Department
             }
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //标题：全部删除
+            BMAdd.Clear();
+        }
     }
 }
