@@ -158,6 +158,7 @@
             new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.gridColumn2, DevExpress.Data.ColumnSortOrder.Ascending),
             new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.gridColumn4, DevExpress.Data.ColumnSortOrder.Ascending)});
             this.gridView2.CustomDrawGroupRow += new DevExpress.XtraGrid.Views.Base.RowObjectCustomDrawEventHandler(this.gridView2_CustomDrawGroupRow);
+            this.gridView2.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.gridView2_RowCellStyle);
             // 
             // gridColumn1
             // 
@@ -346,7 +347,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 部门ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 评审类别ToolStripMenuItem;
@@ -369,6 +369,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripMenuItem 更多查找ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
+        public System.Windows.Forms.MenuStrip menuStrip1;
+        public System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
     }
 }

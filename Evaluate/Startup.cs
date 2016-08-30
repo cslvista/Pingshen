@@ -60,7 +60,6 @@ namespace Evaluate
         private void Startup_Load(object sender, EventArgs e)
         {
             conn.ConnectionString = common.Database.conn;
-            导出ToolStripMenuItem.Enabled = false;
             ClassDisplay.Columns.Add("ZDZB_ZT", typeof(string));
             ClassDisplay.Columns.Add("ZDZB_TITLE", typeof(string));
             ClassDisplay.Columns.Add("ZDZB_BZ", typeof(string));
@@ -330,7 +329,7 @@ namespace Evaluate
                 sheet.Cells[1, 7] = "备注";
                 sheet.Cells[1, 8] = "评审日期";
 
-                for (int i = 2; i < PingshenDisplay.Rows.Count; i++)
+                for (int i = 2; i < PingshenDisplay.Rows.Count+2; i++)
                 {
 
                     for (int j = 1; j <= 8; j++)
@@ -338,13 +337,13 @@ namespace Evaluate
                         switch (j)
                         {
                             case 1: sheet.Cells[i, j] = SelectClass.ToString(); break;
-                            case 2: sheet.Cells[i, j] = PingshenDisplay.Rows[i][0]; break;
-                            case 3: sheet.Cells[i, j] = PingshenDisplay.Rows[i][1]; break;
-                            case 4: sheet.Cells[i, j] = PingshenDisplay.Rows[i][5]; break;
-                            case 5: sheet.Cells[i, j] = PingshenDisplay.Rows[i][6]; break;
-                            case 6: sheet.Cells[i, j] = PingshenDisplay.Rows[i][3]; break;
-                            case 7: sheet.Cells[i, j] = PingshenDisplay.Rows[i][4]; break;
-                            case 8: sheet.Cells[i, j] = PingshenDisplay.Rows[i][2]; break;
+                            case 2: sheet.Cells[i, j] = PingshenDisplay.Rows[i - 2][0]; break;
+                            case 3: sheet.Cells[i, j] = PingshenDisplay.Rows[i - 2][1]; break;
+                            case 4: sheet.Cells[i, j] = PingshenDisplay.Rows[i - 2][5]; break;
+                            case 5: sheet.Cells[i, j] = PingshenDisplay.Rows[i - 2][6]; break;
+                            case 6: sheet.Cells[i, j] = PingshenDisplay.Rows[i - 2][3]; break;
+                            case 7: sheet.Cells[i, j] = PingshenDisplay.Rows[i - 2][4]; break;
+                            case 8: sheet.Cells[i, j] = PingshenDisplay.Rows[i - 2][2]; break;
                         }
                     }
                 }
@@ -369,5 +368,17 @@ namespace Evaluate
             }               
 
      }
-  }
+
+        private void gridView2_RowCellStyle(object sender, RowCellStyleEventArgs e)
+        {
+            if (e.Column.FieldName == "PX_PF")
+            {
+                string PX_PF = gridView2.GetRowCellDisplayText(e.RowHandle, gridView2.Columns["PX_PF"]);
+                if (PX_PF == "不达标")
+                {
+                    e.Appearance.BackColor = Color.Orange;
+                }
+            }
+        }
+    }
 }

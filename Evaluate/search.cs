@@ -229,7 +229,7 @@ namespace Evaluate
             }
 
             //2.写入主界面
-           
+            f1.PingshenDisplay = PingshenDisplay;
             f1.gridControl2.DataSource=PingshenDisplay;
 
     }
