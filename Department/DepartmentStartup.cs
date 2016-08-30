@@ -283,17 +283,19 @@ namespace Department
                     {
                         ZDZB_ID.Add(ZDZB_ID_ALL[i]);
                         ZDZB_TITLE.Add(ZDZB_TITLE_ALL[i]);
-                        conn.Close();
                         continue;
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("错误2:"+ex.Message);
-                    conn.Close();
+                    MessageBox.Show("错误2:"+ex.Message);                  
                     t2_flag = 0;
                     return;
+                }
+                finally
+                {
+                    conn.Close();
                 }
 
 

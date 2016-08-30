@@ -12,9 +12,9 @@ using System.Threading;
 using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
-
 using System.IO;
-
+using System.Reflection;
+using Microsoft.Office.Interop.Excel;
 using pingshen1;
 using Department;
 
@@ -48,8 +48,8 @@ namespace Evaluate
         int xWidth = SystemInformation.PrimaryMonitorSize.Width;//获取显示器屏幕宽度 
         int yHeight = SystemInformation.PrimaryMonitorSize.Height;//获取显示器屏幕高度
 
-        public DataTable ClassDisplay = new DataTable();
-        public DataTable PingshenDisplay = new DataTable();
+        public System.Data.DataTable ClassDisplay = new System.Data.DataTable();
+        public System.Data.DataTable PingshenDisplay = new System.Data.DataTable();
 
         delegate void UpdateUI();//用于多线程的界面UI委托
         public Startup()
@@ -311,47 +311,61 @@ namespace Evaluate
                 return;
             }
 
-            Stream myStream = saveFileDialog.OpenFile();
-            StreamWriter sw = new StreamWriter(myStream, System.Text.Encoding.GetEncoding(-0));
-            
+            Microsoft.Office.Interop.Excel.Application xls = new Microsoft.Office.Interop.Excel.Application();
+            _Workbook book = xls.Workbooks.Add(); //创建一张表，一张表可以包含多个sheet         
+            _Worksheet sheet;//定义sheet变量
+            sheet = book.Worksheets.Add();
+
+            xls.Visible = false;//设置Excel后台运行
+            xls.DisplayAlerts = false;//设置不显示确认修改提示            
+
             try
-            {               
-                StringBuilder str = new StringBuilder();
-                StringBuilder tempStr = new StringBuilder();
+            {
+                sheet.Cells[1, 1] = "评审类别";
+                sheet.Cells[1, 2] = "部门名称";
+                sheet.Cells[1, 3] = "部门地点";
+                sheet.Cells[1, 4] = "项目编号";
+                sheet.Cells[1, 5] = "项目内容";
+                sheet.Cells[1, 6] = "评分";
+                sheet.Cells[1, 7] = "备注";
+                sheet.Cells[1, 8] = "评审日期";
 
-                str.Length = 0;
-                str.Append("评审类别" + "\t" + "部门名称" + "\t" + "部门地点" + "\t" + "项目编号" + "\t" + "项目内容" + "\t" + "评分" + "\t" + "备注" + "\t"+ "评审日期");
-                sw.WriteLine(str);
-
-                for (int i = 0; i < PingshenDisplay.Rows.Count; i++)
+                for (int i = 2; i < PingshenDisplay.Rows.Count; i++)
                 {
 
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 1; j <= 8; j++)
                     {
-                        tempStr.Append("\t");
                         switch (j)
                         {
-                            case 0: tempStr.Length = 0; tempStr.Append(SelectClass);break;
-                            case 1: tempStr.Append(PingshenDisplay.Rows[i][0]); break;
-                            case 2: tempStr.Append(PingshenDisplay.Rows[i][1]); break;
-                            case 3: tempStr.Append(PingshenDisplay.Rows[i][5]); break;
-                            case 4: tempStr.Append(PingshenDisplay.Rows[i][6]); break;
-                            case 5: tempStr.Append(PingshenDisplay.Rows[i][3]); break;
-                            case 6: tempStr.Append(PingshenDisplay.Rows[i][4]); break;
-                            case 7: tempStr.Append(PingshenDisplay.Rows[i][2]); break;
-                        }                  
+                            case 1: sheet.Cells[i, j] = SelectClass.ToString(); break;
+                            case 2: sheet.Cells[i, j] = PingshenDisplay.Rows[i][0]; break;
+                            case 3: sheet.Cells[i, j] = PingshenDisplay.Rows[i][1]; break;
+                            case 4: sheet.Cells[i, j] = PingshenDisplay.Rows[i][5]; break;
+                            case 5: sheet.Cells[i, j] = PingshenDisplay.Rows[i][6]; break;
+                            case 6: sheet.Cells[i, j] = PingshenDisplay.Rows[i][3]; break;
+                            case 7: sheet.Cells[i, j] = PingshenDisplay.Rows[i][4]; break;
+                            case 8: sheet.Cells[i, j] = PingshenDisplay.Rows[i][2]; break;
+                        }
                     }
-                    sw.WriteLine(tempStr);
                 }
+                Range allColumn = sheet.Columns;//自动列宽
+                allColumn.AutoFit();//自动列宽
+                book.SaveAs(saveFileDialog.FileName);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return;
             }
             finally
             {
-                sw.Close();
-                myStream.Close();
+                MessageBox.Show("保存成功！");
+                book.Close();//关闭打开的表
+                xls.Quit();//Excel程序退出                       
+                sheet = null;//设置为null，防止内存泄露   
+                book = null;
+                xls = null;
+                GC.Collect();
             }               
 
      }

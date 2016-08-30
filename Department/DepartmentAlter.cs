@@ -75,6 +75,10 @@ namespace Department
             {
                 sql = String.Format("update Y_ZDBM set ZDBM_MC='{0}',ZDBM_DD='{1}',ZDMB_ZT='1' where ZDBM_ID='{2}'", BMMC, BMDD, SelectBMID);
             }
+            else //直接修改
+            {
+                sql = String.Format("update Y_ZDBM set ZDBM_MC='{0}',ZDBM_DD='{1}'  where ZDBM_ID='{2}'", BMMC, BMDD, SelectBMID);
+            }
 
             //3 执行SQL语句
             try
@@ -107,6 +111,11 @@ namespace Department
             else if (comboBox1.Text == "启用")
             {
                 f1.BMDisplay.Rows[SelectBMI]["ZDMB_ZT"] = "存在";
+                f1.BMDisplay.Rows[SelectBMI]["ZDBM_MC"] = BMMC;
+                f1.BMDisplay.Rows[SelectBMI]["ZDBM_DD"] = BMDD;
+            }
+            else
+            {
                 f1.BMDisplay.Rows[SelectBMI]["ZDBM_MC"] = BMMC;
                 f1.BMDisplay.Rows[SelectBMI]["ZDBM_DD"] = BMDD;
             }
