@@ -706,5 +706,12 @@ namespace Department
         {
             gridControl1_Click(null, null);
         }
+
+        private void 项目新增多部门ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProjectAddMore frm = new ProjectAddMore();
+            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.Show();
+        }
     }
 }

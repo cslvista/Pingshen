@@ -24,6 +24,7 @@ namespace Department
         List<string> ZDXB_BH_ALL = new List<string>();
         List<string> ZDXB_NAME_ALL = new List<string>();
         List<string> ZDXB_SX_ALL = new List<string>();
+        List<string> ZDXB_BZ_ALL = new List<string>();
 
         List<string> ZDXB_ID_CZ = new List<string>();
 
@@ -34,6 +35,7 @@ namespace Department
         StringBuilder SelectZDXB_BH = new StringBuilder();//项目编号
         StringBuilder SelectZDXB_NAME = new StringBuilder();//项目内容      
         StringBuilder SelectZDXB_SX = new StringBuilder();//项目属性
+        StringBuilder SelectZDXB_BZ = new StringBuilder();//项目属性
         StringBuilder SelectZDZB_ID = new StringBuilder();//主表ID
         StringBuilder SelectZDZB_TITLE = new StringBuilder();//主表名称
         int SelectZDXB_I;
@@ -160,12 +162,14 @@ namespace Department
             SelectZDXB_BH.Length = 0;
             SelectZDXB_NAME.Length = 0;
             SelectZDXB_SX.Length = 0;
+            SelectZDXB_BZ.Length = 0;
             try //单击到状态行的时候，会出错，因此要catch
             {
                 SelectZDXB_ID.Append(gridView1.GetFocusedRowCellValue("ZDXB_ID").ToString());
                 SelectZDXB_BH.Append(gridView1.GetFocusedRowCellValue("ZDXB_BH").ToString());
                 SelectZDXB_NAME.Append(gridView1.GetFocusedRowCellValue("ZDXB_NAME").ToString());
                 SelectZDXB_SX.Append(gridView1.GetFocusedRowCellValue("ZDXB_SX").ToString());
+                SelectZDXB_BZ.Append(gridView1.GetFocusedRowCellValue("ZDXB_BZ").ToString());
                 SelectZDXB_I = gridView1.GetDataSourceRowIndex(gridView1.FocusedRowHandle); ;
                 button1.Enabled = true;//全部添加
                 button2.Enabled = true;//添加
@@ -188,7 +192,7 @@ namespace Department
             button5.Enabled = true; //清空
             button2.Enabled = false;//添加
             ProjectDisplay.Rows.RemoveAt(SelectZDXB_I);
-            ProjectADD.Rows.Add(new object[] { SelectZDZB_TITLE, SelectZDXB_BH, SelectZDXB_NAME, SelectZDXB_SX, SelectZDZB_ID, SelectZDXB_ID });
+            ProjectADD.Rows.Add(new object[] { SelectZDZB_TITLE, SelectZDXB_BH, SelectZDXB_NAME, SelectZDXB_SX, SelectZDZB_ID, SelectZDXB_ID,SelectZDXB_BZ});
             gridControl2.DataSource = ProjectADD;
         }
 
@@ -200,6 +204,7 @@ namespace Department
             SelectZDXB_BH.Length = 0;
             SelectZDXB_NAME.Length = 0;
             SelectZDXB_SX.Length = 0;
+            SelectZDXB_BZ.Length = 0;
             try //单击到状态行的时候，会出错，因此要catch
             {
                 SelectZDZB_ID.Append(gridView2.GetFocusedRowCellValue("ZDZB_ID").ToString());
@@ -207,6 +212,7 @@ namespace Department
                 SelectZDXB_ID.Append(gridView2.GetFocusedRowCellValue("ZDXB_ID").ToString());
                 SelectZDXB_BH.Append(gridView2.GetFocusedRowCellValue("ZDXB_BH").ToString());
                 SelectZDXB_NAME.Append(gridView2.GetFocusedRowCellValue("ZDXB_NAME").ToString());
+                SelectZDXB_BZ.Append(gridView2.GetFocusedRowCellValue("ZDXB_BZ").ToString());
                 SelectZDXB_SX.Append(gridView2.GetFocusedRowCellValue("ZDXB_SX").ToString());
                 SelectZDXB_I=gridView2.GetDataSourceRowIndex(gridView2.FocusedRowHandle);
                 button2.Enabled = false;//添加
@@ -223,7 +229,7 @@ namespace Department
         private void button4_Click(object sender, EventArgs e)
         {
             ProjectADD.Rows.RemoveAt(SelectZDXB_I);
-            ProjectDisplay.Rows.Add(new object[] { SelectZDXB_BH, SelectZDXB_NAME, SelectZDXB_SX, SelectZDXB_ID });
+            ProjectDisplay.Rows.Add(new object[] { SelectZDXB_BH, SelectZDXB_NAME, SelectZDXB_SX, SelectZDXB_ID, SelectZDXB_BZ});
             button4.Enabled = false;//移除
 
         }
@@ -266,6 +272,7 @@ namespace Department
             ZDXB_BH_ALL.Clear();
             ZDXB_NAME_ALL.Clear();
             ZDXB_SX_ALL.Clear();
+            ZDXB_BZ_ALL.Clear();
             ZDXB_ID_CZ.Clear();
 
 
@@ -273,7 +280,7 @@ namespace Department
             try
             {
                 string sql = String.Format(
-            "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX from Y_ZDXB where ZDXB_SX='0' and ZDZB_ID='{0}'", SelectZDZB_ID);
+            "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX,ZDXB_BZ from Y_ZDXB where ZDXB_SX='0' and ZDZB_ID='{0}'", SelectZDZB_ID);
                 SqlCommand comm = new SqlCommand(sql, conn);
                 conn.Open();
                 SqlDataReader readData = comm.ExecuteReader();
@@ -285,6 +292,8 @@ namespace Department
                         ZDXB_BH_ALL.Add(readData[1].ToString());
                         ZDXB_NAME_ALL.Add(readData[2].ToString());
                         ZDXB_SX_ALL.Add(readData[3].ToString());
+                        ZDXB_BZ_ALL.Add(readData[4].ToString());
+
                     }
                 }
 
@@ -292,12 +301,12 @@ namespace Department
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                t1_flag = 0;
                 return;
             }
             finally
             {
-                conn.Close();
-                t1_flag = 0;
+                conn.Close();               
             }
             //查找该部门中已经添加的项目
             try
@@ -319,12 +328,13 @@ namespace Department
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                t1_flag = 0;
                 return;
             }
             finally
             {
                 conn.Close();
-                t1_flag = 0;
+                
             }
             //从gridcontrol中选择已经加入的数据
             for (int i = 0; i < ProjectADD.Rows.Count; i++)
@@ -351,14 +361,14 @@ namespace Department
                         }
                         else if (j == ZDXB_ID_CZ.Count - 1)//如果最后一个都不是，那就添加
                         {
-                            ProjectDisplay.Rows.Add(new object[] { ZDXB_BH_ALL[i], ZDXB_NAME_ALL[i], ZDXB_SX_ALL[i], ZDXB_ID_ALL[i] });
+                            ProjectDisplay.Rows.Add(new object[] { ZDXB_BH_ALL[i], ZDXB_NAME_ALL[i], ZDXB_SX_ALL[i], ZDXB_ID_ALL[i], ZDXB_BZ_ALL[i] });
                             
                         }
                     }
                 }
                 else
                 {
-                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH_ALL[i], ZDXB_NAME_ALL[i], ZDXB_SX_ALL[i], ZDXB_ID_ALL[i] });
+                    ProjectDisplay.Rows.Add(new object[] { ZDXB_BH_ALL[i], ZDXB_NAME_ALL[i], ZDXB_SX_ALL[i], ZDXB_ID_ALL[i], ZDXB_BZ_ALL[i] });
                 }
                 
             }
@@ -368,6 +378,7 @@ namespace Department
             {
                 gridControl1.DataSource = ProjectDisplay;
                 button1.Enabled = true;//全部添加
+                t1_flag = 0;
             }));
             
         }

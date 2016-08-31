@@ -16,9 +16,7 @@ namespace pingshen1
         SqlConnection conn = new SqlConnection();
         public string SelectClass;//评审类别
         public string SelectClassID;//评审类别ID
-        public StringBuilder sql1 = new StringBuilder();
-        List<string> ZDBM_ID_ZY = new List<string>();//在用的部门的ID
-        List<string> ZDXB_ID = new List<string>();//更新项的ID
+        StringBuilder  ZDXB_ID=new StringBuilder();//更新项的ID
         public ProjectAdd()
         {
             InitializeComponent();
@@ -70,7 +68,6 @@ namespace pingshen1
                 comm.Parameters["@ZDXB_NAME"].Value = XMNR;
                 comm.Parameters["@ZDXB_SX"].Value = SX_ZT;
                 comm.Parameters["@ZDXB_BZ"].Value = XMBZ;
-
                 conn.Open();
                 comm.ExecuteNonQuery();
             }
@@ -83,10 +80,35 @@ namespace pingshen1
             {
                 conn.Close();
             }
-            
+
+            //3.查询新增项的ID
+            ZDXB_ID.Length = 0;
+            try
+            {
+                string sql = String.Format("select ZDXB_ID from Y_ZDXB where ZDXB_BH='{0}' and ZDXB_NAME='{1}'", XMBH,XMNR);
+                SqlCommand comm = new SqlCommand(sql, conn);
+                conn.Open();
+                SqlDataReader readData = comm.ExecuteReader();
+                if (readData.HasRows)
+                {
+                    readData.Read();
+                    ZDXB_ID.Append(readData[0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+
             //4.将数据添加到原窗体的表格中
             ProjectStartup f1 = (ProjectStartup)this.Owner;
-            f1.ProjectDisplay.Rows.Add(new object[] {XMBH, XMNR, XMBZ, SX, DateTime.Now.ToString()});                   
+            f1.ProjectDisplay.Rows.Add(new object[] {XMBH, XMNR, XMBZ, SX, DateTime.Now.ToString(), ZDXB_ID.ToString()});                   
             f1.gridControl1.DataSource = f1.ProjectDisplay;
             textBox1.Text = "";
             textBox2.Text = "";

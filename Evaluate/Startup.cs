@@ -374,7 +374,7 @@ namespace Evaluate
             if (e.Column.FieldName == "PX_PF")
             {
                 string PX_PF = gridView2.GetRowCellDisplayText(e.RowHandle, gridView2.Columns["PX_PF"]);
-                if (PX_PF == "不达标")
+                if (PX_PF == "不达标"  || PX_PF == "部分达标")
                 {
                     e.Appearance.BackColor = Color.Orange;
                 }

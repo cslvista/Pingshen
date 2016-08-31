@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DepartmentStartup));
             this.gridControl2 = new DevExpress.XtraGrid.GridControl();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.部门新增ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.部门修改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.项目新增ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +55,7 @@
             this.ProjectDeleteT = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
-            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.项目新增单ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.项目新增多ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.项目删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +66,7 @@
             this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.项目新增多部门ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
@@ -99,9 +101,10 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.部门新增ToolStripMenuItem,
             this.部门修改ToolStripMenuItem,
-            this.项目新增ToolStripMenuItem1});
+            this.项目新增ToolStripMenuItem1,
+            this.项目新增多部门ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 82);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 136);
             // 
             // 部门新增ToolStripMenuItem
             // 
@@ -224,7 +227,7 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(111, 20);
+            this.comboBox1.Location = new System.Drawing.Point(119, 20);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox1.MaxDropDownItems = 100;
             this.comboBox1.Name = "comboBox1";
@@ -284,14 +287,14 @@
             // ProjectAddT
             // 
             this.ProjectAddT.Name = "ProjectAddT";
-            this.ProjectAddT.Size = new System.Drawing.Size(141, 26);
+            this.ProjectAddT.Size = new System.Drawing.Size(181, 26);
             this.ProjectAddT.Text = "单部门";
             this.ProjectAddT.Click += new System.EventHandler(this.ProjectAddT_Click);
             // 
             // ProjectAddMoreT
             // 
             this.ProjectAddMoreT.Name = "ProjectAddMoreT";
-            this.ProjectAddMoreT.Size = new System.Drawing.Size(141, 26);
+            this.ProjectAddMoreT.Size = new System.Drawing.Size(181, 26);
             this.ProjectAddMoreT.Text = "多部门";
             this.ProjectAddMoreT.Click += new System.EventHandler(this.ProjectAddMoreT_Click);
             // 
@@ -448,6 +451,13 @@
             this.panel1.Size = new System.Drawing.Size(1101, 54);
             this.panel1.TabIndex = 22;
             // 
+            // 项目新增多部门ToolStripMenuItem
+            // 
+            this.项目新增多部门ToolStripMenuItem.Name = "项目新增多部门ToolStripMenuItem";
+            this.项目新增多部门ToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
+            this.项目新增多部门ToolStripMenuItem.Text = "项目新增(多部门)";
+            this.项目新增多部门ToolStripMenuItem.Click += new System.EventHandler(this.项目新增多部门ToolStripMenuItem_Click);
+            // 
             // DepartmentStartup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -512,5 +522,6 @@
         private System.Windows.Forms.ToolStripMenuItem 项目新增多ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 项目删除ToolStripMenuItem;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn4;
+        private System.Windows.Forms.ToolStripMenuItem 项目新增多部门ToolStripMenuItem;
     }
 }
