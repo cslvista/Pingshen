@@ -63,8 +63,12 @@ namespace Department
             //3.1 写入部门表
             try
             {
-                string sql = String.Format("insert into Y_ZDBM (ZDBM_MC,ZDBM_DD,ZDMB_ZT) values('{0}','{1}','{2}')", BMMC, BMDD, "1");
+                string sql = "insert into Y_ZDBM (ZDBM_MC,ZDBM_DD,ZDMB_ZT) values(@ZDBM_MC,@ZDBM_DD,'1')";
                 SqlCommand comm = new SqlCommand(sql, conn);
+                comm.Parameters.Add("@ZDBM_MC", SqlDbType.NChar);
+                comm.Parameters.Add("@ZDBM_DD", SqlDbType.NChar);
+                comm.Parameters["@ZDBM_MC"].Value = BMMC;
+                comm.Parameters["@ZDBM_DD"].Value = BMDD;
                 conn.Open();
                 comm.ExecuteNonQuery();
             }
