@@ -32,15 +32,19 @@ namespace pingshen1
         {
             textBox1.Text = SelectBH.ToString();
             textBox2.Text = SelectNAME.ToString();
+            textBox3.Text = SelectBZ.ToString();
+
             if (checkBox1.Checked == true)
             {
-                checkBox2.Checked = false;               
+                comboBox1.Text = SelectSX.ToString();
+                comboBox1.Enabled = false;
                 textBox1.ReadOnly = true;
                 textBox2.ReadOnly = true;
                 textBox3.ReadOnly = true;
             }
             else
             {
+                comboBox1.Enabled = true;
                 textBox1.ReadOnly = false;
                 textBox2.ReadOnly = false;
                 textBox3.ReadOnly = false;
@@ -63,7 +67,7 @@ namespace pingshen1
             //2.根据状态变更构建SQL语句
             sql.Length = 0;
 
-            if (checkBox1.Checked == false && checkBox2.Checked == false)//纯更新
+            if (checkBox1.Checked == false && comboBox1.Text== SelectSX.ToString())//纯更新
             {
                 sql.Append( String.Format("update Y_ZDXB set ZDXB_BH='{0}',ZDXB_NAME='{1}',ZDXB_BZ='{2}' where ZDXB_ID='{3}'", XMBH, XMNR, XMBZ,SelectID));
                 
@@ -80,7 +84,7 @@ namespace pingshen1
                         + String.Format("delete from Y_ZDZBBMGX where ZDXB_ID='{0}'", SelectID));
                 }
             }
-            else if (checkBox2.Checked == true)//变更状态+更新
+            else if (comboBox1.Text != SelectSX.ToString())//变更状态+更新
             {
                 if (SelectSX.ToString() == "对所有部门有效")
                 {
@@ -115,7 +119,7 @@ namespace pingshen1
 
           //4.写入到窗口的菜单中
             ProjectStartup f1 = (ProjectStartup)this.Owner;
-            if (checkBox1.Checked == false && checkBox2.Checked == false)//纯更新
+            if (checkBox1.Checked == false && comboBox1.Text == SelectSX.ToString())//纯更新
             {
                 f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_BH"] = XMBH;
                 f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_NAME"] = XMNR;
@@ -125,7 +129,7 @@ namespace pingshen1
             {
                 f1.ProjectDisplay.Rows.RemoveAt(SelectProjectI);
             }
-            else if (checkBox2.Checked == true)//变更状态+更新
+            else if (comboBox1.Text != SelectSX.ToString())//变更状态+更新
             {
                 f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_BH"] = XMBH;
                 f1.ProjectDisplay.Rows[SelectProjectI]["ZDXB_NAME"] = XMNR;
@@ -152,25 +156,20 @@ namespace pingshen1
             textBox1.Text = SelectBH.ToString();
             textBox2.Text = SelectNAME.ToString();
             textBox3.Text = SelectBZ.ToString();
-            label4.Text = "创建日期: "+ SelectDate.ToString();
             if (SelectSX.ToString() == "对所有部门有效")
             {
-                label1.Text = "项目属性：对所有部门有效";
-                checkBox2.Text = "变更为对指定部门有效";
+                comboBox1.Items.Add("对所有部门有效");
+                comboBox1.Items.Add("变更为对指定部门有效");
+                comboBox1.Text = "对所有部门有效";
             }
             else
             {
-                label1.Text = "项目属性：对指定部门有效";
-                checkBox2.Text = "变更为对所有部门有效";
+                comboBox1.Items.Add("对指定部门有效");
+                comboBox1.Items.Add("变更为对所有部门有效");
+                comboBox1.Text = "对指定部门有效";
             }
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox2.Checked == true)
-            {
-                checkBox1.Checked = false;
-            }
-        }
+
     }
 }

@@ -17,7 +17,9 @@ namespace pingshen1
     public partial class ProjectStartup : Form
     {
         SqlConnection conn = new SqlConnection();
-        
+        SqlCommand comm;
+        SqlDataReader readData;
+
         //属于Y_ZDZB（评审主表）
         List<string> ZDZB_ID = new List<string>();
         List<string> ZDZB_TITLE = new List<string>();
@@ -75,7 +77,7 @@ namespace pingshen1
         private void ProjectStartup_Load(object sender, EventArgs e)
         {
             conn.ConnectionString = common.Database.conn;
-
+            comm = conn.CreateCommand();
             ClassAlterT.Enabled = false;
             ProjectAlterT.Enabled = false;
             ProjectAddT.Enabled = false;
@@ -248,13 +250,11 @@ namespace pingshen1
             ZDXB_SX.Clear();
             ZDXB_DATE.Clear();
             
-            
-            string sql = String.Format("select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_BZ,ZDXB_SX,ZDXB_DATE from Y_ZDXB where ZDZB_ID='{0}'",SelectClassID);
-            SqlCommand comm = new SqlCommand(sql, conn);
             try
             {
+                comm.CommandText = String.Format("select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_BZ,ZDXB_SX,ZDXB_DATE from Y_ZDXB where ZDZB_ID='{0}'", SelectClassID);
                 conn.Open();
-                SqlDataReader readData = comm.ExecuteReader();
+                readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
                     while (readData.Read())
@@ -267,18 +267,17 @@ namespace pingshen1
                         ZDXB_DATE.Add(readData[5].ToString());
                     }
                 }
+                conn.Close();
 
             }
             catch (Exception ex)
             {
+                conn.Close();
                 MessageBox.Show(ex.Message);
+                t2_flag = 0;
                 return;
             }
-            finally
-            {
-                t2_flag = 0;
-                conn.Close();
-            }
+
             //将数据库内容加入到DataTable中
 
             for (int i = 0; i < ZDXB_ID.Count; i++)

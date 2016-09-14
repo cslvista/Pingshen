@@ -151,7 +151,7 @@ namespace Department
             }
             //3 写入主界面
             DepartmentStartup f1 = (DepartmentStartup)this.Owner;
-            f1.gridControl1_Click(null, null);
+            f1.comboBox1_SelectedIndexChanged(null, null);
             MessageBox.Show("添加成功！");
             this.Close();
         }

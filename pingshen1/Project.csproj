@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BMADD.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BMADD.Designer.cs">
+      <DependentUpon>BMADD.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClassAdd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +92,9 @@
     <Compile Include="ProjectStartup.designer.cs">
       <DependentUpon>ProjectStartup.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="BMADD.resx">
+      <DependentUpon>BMADD.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ClassAdd.resx">
       <DependentUpon>ClassAdd.cs</DependentUpon>
     </EmbeddedResource>

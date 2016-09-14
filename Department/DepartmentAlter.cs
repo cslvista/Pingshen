@@ -28,7 +28,7 @@ namespace Department
         private void DepartmentAlter_Load(object sender, EventArgs e)
         {
             conn.ConnectionString = common.Database.conn;
-            label1.Text = "部门状态： "+ SelectBMZT;
+            label1.Text = "部门状态：  "+ SelectBMZT;
             textBox1.Text = SelectBMMC.ToString();
             textBox2.Text = SelectBMDD.ToString();
             if (SelectBMZT.ToString() == "存在")
@@ -86,16 +86,15 @@ namespace Department
                 SqlCommand comm = new SqlCommand(sql, conn);
                 conn.Open();
                 comm.ExecuteNonQuery();
+                conn.Close();
             }
             catch (Exception ex)
             {
+                conn.Close();
                 MessageBox.Show(ex.Message);
                 return;
             }
-            finally
-            {
-                conn.Close();
-            }
+
             //3.写入主界面
             DepartmentStartup f1 = (DepartmentStartup)this.Owner;
             if (comboBox1.Text == "删除")

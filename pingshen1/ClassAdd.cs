@@ -14,6 +14,8 @@ namespace pingshen1
     public partial class ClassAdd : Form
     {
         SqlConnection conn = new SqlConnection();
+        SqlCommand comm;
+        SqlDataReader readData;
         public ClassAdd()
         {
             InitializeComponent();
@@ -33,9 +35,8 @@ namespace pingshen1
             string ZDZB_ID="";
             //写入数据库
             try
-            {
-                string sql = "insert into Y_ZDZB (ZDZB_TITLE,ZDZB_BZ,ZDZB_ZT) values(@ZDZB_TITLE,@ZDZB_BZ,'1')";                
-                SqlCommand comm = new SqlCommand(sql, conn);
+            {               
+                comm.CommandText = "insert into Y_ZDZB (ZDZB_TITLE,ZDZB_BZ,ZDZB_ZT) values(@ZDZB_TITLE,@ZDZB_BZ,'1')";
                 comm.Parameters.Add("@ZDZB_TITLE", SqlDbType.NChar);
                 comm.Parameters.Add("@ZDZB_BZ", SqlDbType.NChar);
                 comm.Parameters["@ZDZB_TITLE"].Value = TITLE;
@@ -45,22 +46,16 @@ namespace pingshen1
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            finally
-            {
                 conn.Close();
+                MessageBox.Show(ex.Message);                
+                return;
             }
             
             //查询新增项的ID
             try
             {
-                string sql1 = String.Format("select ZDZB_ID from Y_ZDZB where ZDZB_TITLE='{0}'",TITLE);
-              
-                SqlCommand comm = new SqlCommand(sql1, conn);
-                conn.Open();
-                SqlDataReader readData = comm.ExecuteReader();
+                comm.CommandText= String.Format("select ZDZB_ID from Y_ZDZB where ZDZB_TITLE='{0}'", TITLE);
+                readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
                     readData.Read();
@@ -74,6 +69,7 @@ namespace pingshen1
             }
             finally
             {
+                readData.Close();
                 conn.Close();
             }
             //显示到主窗体的列表中
@@ -88,6 +84,7 @@ namespace pingshen1
         private void ClassAdd_Load(object sender, EventArgs e)
         {
             conn.ConnectionString = common.Database.conn;
+            comm = conn.CreateCommand();
         }
     }
 }

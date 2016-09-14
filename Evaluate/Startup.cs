@@ -23,6 +23,9 @@ namespace Evaluate
     public partial class Startup : Form
     {
         SqlConnection conn = new SqlConnection();
+        SqlCommand comm;
+        SqlDataReader readData;
+
         List<string> ZDZB_ID = new List<string>();
         List<string> ZDZB_TITLE = new List<string>();
         List<string> ZDZB_BZ = new List<string>();
@@ -60,6 +63,7 @@ namespace Evaluate
         private void Startup_Load(object sender, EventArgs e)
         {
             conn.ConnectionString = common.Database.conn;
+            comm = conn.CreateCommand();
             ClassDisplay.Columns.Add("ZDZB_ZT", typeof(string));
             ClassDisplay.Columns.Add("ZDZB_TITLE", typeof(string));
             ClassDisplay.Columns.Add("ZDZB_BZ", typeof(string));
@@ -81,13 +85,11 @@ namespace Evaluate
 
          public void WriteGridControl1()
         {
-            string sql = "select ZDZB_ID,ZDZB_TITLE,ZDZB_BZ,ZDZB_ZT,ZDZB_DATE from Y_ZDZB";
-            SqlCommand comm = new SqlCommand(sql, conn);
-
+            comm.CommandText  = "select ZDZB_ID,ZDZB_TITLE,ZDZB_BZ,ZDZB_ZT,ZDZB_DATE from Y_ZDZB";
             try
             {
                 conn.Open();
-                SqlDataReader readData = comm.ExecuteReader();
+                readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
                     while (readData.Read())
@@ -108,8 +110,10 @@ namespace Evaluate
             }
             finally
             {
+                readData.Close();
                 conn.Close();
             }
+
             for (int i = 0; i < ZDZB_ID.Count; i++)
             {
                 if (ZDZB_ZT[i] == "1")
@@ -198,13 +202,12 @@ namespace Evaluate
             string time1 = String.Format("{0}-{1}-{2} 00:00:01.001", DateTime.Now.Year, DateTime.Now.Month-1, "1");
             string time2 = String.Format("{0}-{1}-{2} 23:59:59.100", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-            string sql = String.Format("select b.ZDBM_MC,c.ZDBM_DD,b.PS_DATE,a.PX_PF,a.PX_BZ,a.ZDXB_BH,a.ZDXB_NAME from Y_PSMX a inner join  Y_PSZB b on a.PS_ID= b.PS_ID inner join  Y_ZDBM c on c.ZDBM_ID=a.ZDBM_ID where  b.ZDZB_ID='{0}'", SelectClassID)
+            comm.CommandText = String.Format("select b.ZDBM_MC,c.ZDBM_DD,b.PS_DATE,a.PX_PF,a.PX_BZ,a.ZDXB_BH,a.ZDXB_NAME from Y_PSMX a inner join  Y_PSZB b on a.PS_ID= b.PS_ID inner join  Y_ZDBM c on c.ZDBM_ID=a.ZDBM_ID where  b.ZDZB_ID='{0}'", SelectClassID)
                         +String.Format("and b.PS_DATE between '{0}' and '{1}'", time1, time2);
-            SqlCommand comm = new SqlCommand(sql, conn);
             try
             {
                 conn.Open();
-                SqlDataReader readData = comm.ExecuteReader();
+                readData= comm.ExecuteReader();
                 if (readData.HasRows)
                 {
                     while (readData.Read())
@@ -218,17 +221,17 @@ namespace Evaluate
                         ZDXB_NAME.Add(readData[6].ToString());
                     }
                 }
+                readData.Close();
+                conn.Close();
 
             }
             catch (Exception ex)
             {
+                readData.Close();
+                conn.Close();
                 MessageBox.Show(ex.Message);
                 t1_flag = 0;
                 return;
-            }
-            finally
-            {
-                conn.Close();
             }
             //将数据库内容加入到DataTable中
             
@@ -326,10 +329,10 @@ namespace Evaluate
                 sheet.Cells[1, 4] = "项目编号";
                 sheet.Cells[1, 5] = "项目内容";
                 sheet.Cells[1, 6] = "评分";
-                sheet.Cells[1, 7] = "备注";
+                sheet.Cells[1, 7] = "评分备注";
                 sheet.Cells[1, 8] = "评审日期";
 
-                for (int i = 2; i < PingshenDisplay.Rows.Count+2; i++)
+                for (int i = 2; i < PingshenDisplay.Rows.Count + 2; i++)
                 {
 
                     for (int j = 1; j <= 8; j++)
@@ -347,9 +350,11 @@ namespace Evaluate
                         }
                     }
                 }
+
                 Range allColumn = sheet.Columns;//自动列宽
                 allColumn.AutoFit();//自动列宽
                 book.SaveAs(saveFileDialog.FileName);
+                MessageBox.Show("保存成功！");
             }
             catch (Exception ex)
             {
@@ -358,7 +363,7 @@ namespace Evaluate
             }
             finally
             {
-                MessageBox.Show("保存成功！");
+                
                 book.Close();//关闭打开的表
                 xls.Quit();//Excel程序退出                       
                 sheet = null;//设置为null，防止内存泄露   
@@ -374,9 +379,12 @@ namespace Evaluate
             if (e.Column.FieldName == "PX_PF")
             {
                 string PX_PF = gridView2.GetRowCellDisplayText(e.RowHandle, gridView2.Columns["PX_PF"]);
-                if (PX_PF == "不达标"  || PX_PF == "部分达标")
+                if (PX_PF == "不达标" )
                 {
                     e.Appearance.BackColor = Color.Orange;
+                }else if (PX_PF == "部分达标")
+                {
+                    e.Appearance.BackColor = Color.Yellow;
                 }
             }
         }

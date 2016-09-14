@@ -194,7 +194,7 @@
             // 
             // gridColumn10
             // 
-            this.gridColumn10.Caption = "备注";
+            this.gridColumn10.Caption = "评分备注";
             this.gridColumn10.FieldName = "PX_BZ";
             this.gridColumn10.Name = "gridColumn10";
             this.gridColumn10.Visible = true;

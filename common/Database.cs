@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace common
 {
+    /// <summary>
+    /// 数据库连接
+    /// </summary>
     public class Database
     {
         //public static string conn = "server=192.168.8.12;database=ERPOA;uid=sa;pwd=hnfy";

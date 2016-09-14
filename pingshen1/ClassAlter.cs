@@ -37,10 +37,10 @@ namespace pingshen1
         private void ClassAlter_Load(object sender, EventArgs e)
         {
             conn.ConnectionString = common.Database.conn;
-            label5.Text ="评审类别状态："+ ZDZB_ZT;
+            label5.Text ="评审类别状态： "+ ZDZB_ZT;
             textBox2.Text = ZDZB_TITLE.ToString();
             textBox1.Text = ZDZB_BZ.ToString();
-            label2.Text = "创建日期："+ZDZB_DATE.ToString();
+            label2.Text = "创建日期：  "+ZDZB_DATE.ToString();
             if (ZDZB_ZT.ToString()=="停用")
             {
                 comboBox1.Items.Add("");
@@ -102,15 +102,13 @@ namespace pingshen1
                 SqlCommand comm = new SqlCommand(sql, conn);
                 conn.Open();
                 comm.ExecuteNonQuery();
+                conn.Close();
             }
             catch (Exception ex)
             {
+                conn.Close();
                 MessageBox.Show(ex.Message);
                 return;
-            }
-            finally
-            {
-                conn.Close();
             }
            
             //4.写入主窗口列表

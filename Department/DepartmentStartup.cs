@@ -16,7 +16,9 @@ namespace Department
     public partial class DepartmentStartup : Form
     {
         SqlConnection conn = new SqlConnection();
-        SqlConnection conn1 = new SqlConnection();
+        SqlCommand comm;
+        SqlDataReader readData;
+
         List<string> ZDBM_ID = new List<string>();//部门名称
         List<string> ZDBM_MC = new List<string>();//部门状态
         List<string> ZDBM_DD = new List<string>();//部门地点
@@ -42,8 +44,6 @@ namespace Department
 
         List<string> ZDZB_ID = new List<string>();
         List<string> ZDZB_TITLE = new List<string>();
-        List<string> ZDZB_ID_ALL = new List<string>();
-        List<string> ZDZB_TITLE_ALL = new List<string>();
 
         List<string> ZDXB_ID = new List<string>();
         List<string> ZDXB_BH = new List<string>();
@@ -84,8 +84,7 @@ namespace Department
         private void DepartmentStartup_Load(object sender, EventArgs e)
         {            
             conn.ConnectionString = common.Database.conn;
-            conn1.ConnectionString = common.Database.conn;
-
+            comm = conn.CreateCommand();
             BMAlterT.Enabled = false;
             ProjectDeleteT.Enabled = false;
             ProjectAddT.Enabled = false;
@@ -111,13 +110,13 @@ namespace Department
         }
 
         public void WriteList()
-        {
-            string sql = "select ZDBM_ID,ZDBM_MC,ZDBM_DD,ZDMB_ZT,ZDMB_DATE from Y_ZDBM";
-            SqlCommand comm = new SqlCommand(sql, conn);
-            try
+        {            
+            //1.读取部门列表
+			try
             {
+                comm.CommandText = "select ZDBM_ID,ZDBM_MC,ZDBM_DD,ZDMB_ZT,ZDMB_DATE from Y_ZDBM";
                 conn.Open();
-                SqlDataReader readData = comm.ExecuteReader();
+                readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
                     while (readData.Read())
@@ -128,17 +127,20 @@ namespace Department
                         ZDMB_ZT.Add(readData[3].ToString());
                         ZDMB_DATE.Add(readData[4].ToString());
                     }
-                }
+                }                
+                
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                conn.Close();
+                MessageBox.Show("错误A1:" + ex.Message);
                 return;
             }
             finally
             {
-                conn.Close();
+                readData.Close();
             }
+
             for (int i = 0; i < ZDBM_ID.Count; i++)
             {
                 if (ZDMB_ZT[i] == "1")
@@ -149,7 +151,43 @@ namespace Department
                 }
             }
             gridControl2.DataSource = BMDisplay;
+			
+			//2.读取评审类别列表
+			try
+            {
+                comm.CommandText = "select ZDZB_ID,ZDZB_TITLE from Y_ZDZB where ZDZB_ZT='1'";
+                readData = comm.ExecuteReader();
+                if (readData.HasRows)
+                {
+                    while (readData.Read())
+                    {
+                        ZDZB_ID.Add(readData[0].ToString());
+                        ZDZB_TITLE.Add(readData[1].ToString());                       
+                    }
+                }
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();                
+                MessageBox.Show("错误A2:"+ex.Message);
+                return;
+            }
+            finally
+            {
+                readData.Close();
+            }
+
+            comboBox1.Items.Clear();
+            for (int i=0;i< ZDZB_TITLE.Count; i++)
+           {
+              comboBox1.Items.Add(ZDZB_TITLE[i].ToString());
+
+           }
+           comboBox1.Text = null;
         }
+		
+		
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -173,10 +211,6 @@ namespace Department
             //1.获取表格中数据
             
             gridControl1.DataSource = null;
-            ZDZB_ID.Clear();
-            ZDZB_TITLE.Clear();
-            ZDZB_ID_ALL.Clear();
-            ZDZB_TITLE_ALL.Clear();
             SelectBMID.Length = 0;
             SelectBMMC.Length = 0;
             SelectBMDD.Length = 0;
@@ -200,10 +234,10 @@ namespace Department
                 部门修改ToolStripMenuItem.Enabled = false;
                 项目新增ToolStripMenuItem1.Enabled = false;
                 ProjectDisplay.Clear();
-                comboBox1.Items.Clear();
+                comboBox1.Enabled = false;
                 return;
             }
-
+           
             if (SelectBMZT.ToString() == "存在")
             {
                 BMAlterT.Enabled = true;
@@ -212,6 +246,7 @@ namespace Department
                 部门新增ToolStripMenuItem.Enabled = true;
                 部门修改ToolStripMenuItem.Enabled = true;
                 项目新增ToolStripMenuItem1.Enabled = true;
+                comboBox1.Enabled = true;
             }
             else
             {
@@ -221,123 +256,13 @@ namespace Department
                 部门新增ToolStripMenuItem.Enabled = true;
                 部门修改ToolStripMenuItem.Enabled = true;
                 项目新增ToolStripMenuItem1.Enabled = false;
-               
-            }
-
-            //2.启动多线程
-            if (t2_flag == 0)
-            {
-                Thread t1 = new Thread(WriteCombobox);//将评审类别显示到combobox上
-                t1.IsBackground = true;
-                t1.Start();
-            }
-
-        }
-        public void WriteCombobox()
-        {
-            t2_flag = 1;           
-            
-            //1.读取所有的部门列表
-            try
-            {
-            string sql = "select ZDZB_ID,ZDZB_TITLE from Y_ZDZB where ZDZB_ZT='1'";
-            SqlCommand comm = new SqlCommand(sql, conn);
-            conn.Open();
-            SqlDataReader readData = comm.ExecuteReader();
-            if (readData.HasRows)
-            {
-               while (readData.Read())
-               {
-                    ZDZB_ID_ALL.Add(readData[0].ToString());
-                    ZDZB_TITLE_ALL.Add(readData[1].ToString());                       
-                }
-            }
+                comboBox1.Enabled = true;
 
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("错误1:"+ex.Message);
-                t2_flag = 0;
-                return;
-            }
-            finally
-            {
-                conn.Close();
-            }
-            if (ZDZB_ID_ALL.Count == 0)
-            {
-                t2_flag = 0;
-                return;
-            }
-            //2.判断这个部门是否和这个评审主表关联
-            for (int i=0;i< ZDZB_ID_ALL.Count; i++)
-            {
-                //从评审细表中看是否有全部科室地点的项目
-                try
-                {
-                    string sql = String.Format("select top 1 ZDXB_BH from Y_ZDXB where ZDXB_SX='1' and ZDZB_ID='{0}'", ZDZB_ID_ALL[i]);
-                    SqlCommand comm = new SqlCommand(sql, conn);
-                    conn.Open();
-                    SqlDataReader readData = comm.ExecuteReader();
-                    if (readData.HasRows)
-                    {
-                        ZDZB_ID.Add(ZDZB_ID_ALL[i]);
-                        ZDZB_TITLE.Add(ZDZB_TITLE_ALL[i]);
-                        continue;
-                    }
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("错误2:"+ex.Message);                  
-                    t2_flag = 0;
-                    return;
-                }
-                finally
-                {
-                    conn.Close();
-                }
+            //2.写入评审细表
+            comboBox1_SelectedIndexChanged(null, null);
 
-
-                //从Y_ZDZBBMGX中看出是否有部门科室地点的项目
-                try
-                {
-                    string sql = String.Format("select top 1 ZDBM_ID from Y_ZDZBBMGX where ZDBM_ID='{0}' and ZDZB_ID='{1}'", SelectBMID, ZDZB_ID_ALL[i]);
-                    SqlCommand comm = new SqlCommand(sql, conn);
-                    conn.Open();
-                    SqlDataReader readData = comm.ExecuteReader();
-                    if (readData.HasRows)
-                    {
-                        ZDZB_ID.Add(ZDZB_ID_ALL[i]);
-                        ZDZB_TITLE.Add(ZDZB_TITLE_ALL[i]);
-                    }
-
-                }
-                catch (Exception ex)
-                {                    
-                    MessageBox.Show("错误3:" + ex.Message);
-                    t2_flag = 0;
-                    return;
-                }
-                finally
-                {
-                    conn.Close();
-                }
-            }
-
-            this.Invoke(new UpdateUI(delegate ()
-            {
-                comboBox1.Items.Clear();
-                for (int i=0;i< ZDZB_TITLE.Count; i++)
-                {
-                    comboBox1.Items.Add(ZDZB_TITLE[i].ToString());
-
-                }
-                comboBox1.Text = ZDZB_TITLE[0];
-
-
-            }));
-            t2_flag = 0;
         }
 
 
@@ -394,17 +319,9 @@ namespace Department
                 项目新增单ToolStripMenuItem.Enabled = true;
                 项目删除ToolStripMenuItem.Enabled = true;
             }
-        }
-
-
-
-
-
-
-       
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
+        }   
+        public void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {           
             gridControl1.DataSource = null;
             ProjectDisplay.Clear();
             SelectProjectZB_TITLE.Length = 0;
@@ -416,15 +333,19 @@ namespace Department
                 {
                     SelectProjectZB_ID.Length = 0;
                     SelectProjectZB_ID.Append(ZDZB_ID[i]);
+                    break;
                 }
             }
+
 
             if (t1_flag == 0)
             {
                 Thread t1 = new Thread(WriteDataGrid);//将评审细表显示到表格上
                 t1.IsBackground = true;
                 t1.Start();
-            }
+            }           
+            
+
         }
 
         public void WriteDataGrid()
@@ -433,7 +354,6 @@ namespace Department
 
             t1_flag = 1;//线程在运行标志          
                        
-
             //清空list集合
             ZDXB_ID.Clear();
             ZDXB_BH.Clear();
@@ -445,11 +365,10 @@ namespace Department
             //2.1 先读取对指定部分部门有效的数据            
             try
             {
-                string sql = String.Format(
+                comm.CommandText = String.Format(
                "select a.ZDXB_ID,b.ZDXB_BH,b.ZDXB_NAME,b.ZDXB_SX,b.ZDXB_BZ from Y_ZDZBBMGX a inner join Y_ZDXB b on a.ZDXB_ID = b.ZDXB_ID where a.ZDBM_ID = '{0}' and a.ZDZB_ID='{1}'", SelectBMID, SelectProjectZB_ID);
-                SqlCommand comm = new SqlCommand(sql, conn1);
-                conn1.Open();
-                SqlDataReader readData = comm.ExecuteReader();
+                conn.Open();
+                readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
                     while (readData.Read())
@@ -460,50 +379,51 @@ namespace Department
                         ZDXB_SX.Add(readData[3].ToString());
                         ZDXB_BZ.Add(readData[4].ToString());
                     }
-                }
-
+                }                
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                t1_flag = 0;               
-                return;               
-            }
-            finally
-            {
-                conn1.Close();
-            }
-            //2.2 再读取对所有部门有效的数据
-            try
-            {
-                string sql = String.Format(
-               "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX,ZDXB_BZ from Y_ZDXB where ZDZB_ID='{0}' and ZDXB_SX='1';", SelectProjectZB_ID);                
-                SqlCommand comm = new SqlCommand(sql, conn1);
-                conn1.Open();
-                SqlDataReader readData = comm.ExecuteReader();
-                if (readData.HasRows)
-                {
-                    while (readData.Read())
-                    {
-                        ZDXB_ID.Add(readData[0].ToString());
-                        ZDXB_BH.Add(readData[1].ToString());
-                        ZDXB_NAME.Add(readData[2].ToString());
-                        ZDXB_SX.Add(readData[3].ToString());
-                        ZDXB_BZ.Add(readData[4].ToString());
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                conn.Close();               
+                MessageBox.Show("错误B1:"+ex.Message);
                 t1_flag = 0;
                 return;
             }
             finally
             {
-                conn1.Close();
+                readData.Close();
             }
+
+            //2.2 再读取对所有部门有效的数据
+            try
+            {
+                comm.CommandText = String.Format(
+               "select ZDXB_ID,ZDXB_BH,ZDXB_NAME,ZDXB_SX,ZDXB_BZ from Y_ZDXB where ZDZB_ID='{0}' and ZDXB_SX='1';", SelectProjectZB_ID);                
+                readData = comm.ExecuteReader();
+                if (readData.HasRows)
+                {
+                    while (readData.Read())
+                    {
+                        ZDXB_ID.Add(readData[0].ToString());
+                        ZDXB_BH.Add(readData[1].ToString());
+                        ZDXB_NAME.Add(readData[2].ToString());
+                        ZDXB_SX.Add(readData[3].ToString());
+                        ZDXB_BZ.Add(readData[4].ToString());
+                    }
+                }                
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();                
+                MessageBox.Show("错误B2:" + ex.Message);
+                t1_flag = 0;
+                return;
+            }
+            finally
+            {
+                readData.Close();
+            }
+
             //将数据库内容加入到DataTable中 
 
             for (int i = 0; i < ZDXB_ID.Count; i++)
@@ -712,6 +632,11 @@ namespace Department
             ProjectAddMore frm = new ProjectAddMore();
             frm.StartPosition = FormStartPosition.CenterScreen;
             frm.Show();
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }

@@ -412,7 +412,7 @@ namespace Department
             ProjectDisplay.Clear();
             for (int i = 0; i < ZDXB_ID.Count; i++)
             {
-                ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], ZDXB_ID[i] });
+                ProjectDisplay.Rows.Add(new object[] { ZDXB_BH[i], ZDXB_NAME[i], ZDXB_ID[i], ZDXB_BZ[i]});
             }
 
             MessageBox.Show("添加成功！");

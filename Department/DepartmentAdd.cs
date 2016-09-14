@@ -15,6 +15,8 @@ namespace Department
     public partial class DepartmentAdd : Form
     {
         SqlConnection conn = new SqlConnection();
+        SqlCommand comm;
+        SqlDataReader readData;
 
         public DepartmentAdd()
         {
@@ -35,27 +37,30 @@ namespace Department
             string BMDD = textBox2.Text.Trim();//备注，输入过滤
             string BMID = "";
             //2.查询是否有相同的项目
+           
             try
             {
-                string sql = String.Format("select top 1 ZDBM_ID from Y_ZDBM where ZDBM_MC='{0}' and ZDBM_DD='{1}'", BMMC, BMDD);
-                SqlCommand comm = new SqlCommand(sql, conn);
+                comm.CommandText = String.Format("select top 1 ZDBM_ID from Y_ZDBM where ZDBM_MC='{0}' and ZDBM_DD='{1}'", BMMC, BMDD);
                 conn.Open();
-                SqlDataReader readData = comm.ExecuteReader();
+                readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
-                    MessageBox.Show("该部门已经存在，无需重复添加！");
+                    conn.Close();
+                    MessageBox.Show("该部门已经存在，无需重复添加！");                   
                     return;
                 }
+                
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                conn.Close();
+                MessageBox.Show("错误1:"+ex.Message);                
                 return;
-                
+
             }
             finally
             {
-                conn.Close();
+                readData.Close();
             }
 
 
@@ -63,45 +68,37 @@ namespace Department
             //3.1 写入部门表
             try
             {
-                string sql = "insert into Y_ZDBM (ZDBM_MC,ZDBM_DD,ZDMB_ZT) values(@ZDBM_MC,@ZDBM_DD,'1')";
-                SqlCommand comm = new SqlCommand(sql, conn);
+                comm.CommandText = "insert into Y_ZDBM (ZDBM_MC,ZDBM_DD,ZDMB_ZT) values(@ZDBM_MC,@ZDBM_DD,'1')";
                 comm.Parameters.Add("@ZDBM_MC", SqlDbType.NChar);
                 comm.Parameters.Add("@ZDBM_DD", SqlDbType.NChar);
                 comm.Parameters["@ZDBM_MC"].Value = BMMC;
                 comm.Parameters["@ZDBM_DD"].Value = BMDD;
-                conn.Open();
                 comm.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                conn.Close();
+                MessageBox.Show("错误2:" + ex.Message);                
                 return;
             }
-            finally
-            {
-                conn.Close();
-            }
+            
             //3.2 查询新增项的ID
             try
             {
-                string sql = String.Format("select ZDBM_ID from Y_ZDBM where ZDBM_MC='{0}' and ZDBM_DD='{1}'", BMMC,BMDD);              
-                SqlCommand comm = new SqlCommand(sql, conn);
-                conn.Open();
-                SqlDataReader readData = comm.ExecuteReader();
+                comm.CommandText = String.Format("select ZDBM_ID from Y_ZDBM where ZDBM_MC='{0}' and ZDBM_DD='{1}'", BMMC, BMDD);
+                readData = comm.ExecuteReader();
                 if (readData.HasRows)
                 {
                     readData.Read();
                     BMID = readData[0].ToString();
                 }
+                conn.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            finally
-            {
                 conn.Close();
+                MessageBox.Show("错误3:" + ex.Message);
+                return;
             }
             
             //4.显示到主窗体的列表中
@@ -115,6 +112,7 @@ namespace Department
         private void DepartmentAdd_Load(object sender, EventArgs e)
         {
             conn.ConnectionString = common.Database.conn;
+            comm = conn.CreateCommand();
         }
     }
 }
