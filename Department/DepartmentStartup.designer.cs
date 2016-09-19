@@ -83,12 +83,12 @@
             this.gridControl2.ContextMenuStrip = this.contextMenuStrip1;
             this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gridControl2.Location = new System.Drawing.Point(3, 17);
+            this.gridControl2.Location = new System.Drawing.Point(3, 10);
             this.gridControl2.MainView = this.gridView2;
             this.gridControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridControl2.Name = "gridControl2";
             this.tableLayoutPanel2.SetRowSpan(this.gridControl2, 2);
-            this.gridControl2.Size = new System.Drawing.Size(468, 879);
+            this.gridControl2.Size = new System.Drawing.Size(405, 886);
             this.gridControl2.TabIndex = 14;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2});
@@ -104,33 +104,33 @@
             this.项目新增ToolStripMenuItem1,
             this.项目新增多部门ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 108);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(194, 100);
             // 
             // 部门新增ToolStripMenuItem
             // 
             this.部门新增ToolStripMenuItem.Name = "部门新增ToolStripMenuItem";
-            this.部门新增ToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
+            this.部门新增ToolStripMenuItem.Size = new System.Drawing.Size(193, 24);
             this.部门新增ToolStripMenuItem.Text = "部门新增";
             this.部门新增ToolStripMenuItem.Click += new System.EventHandler(this.部门新增ToolStripMenuItem_Click);
             // 
             // 部门修改ToolStripMenuItem
             // 
             this.部门修改ToolStripMenuItem.Name = "部门修改ToolStripMenuItem";
-            this.部门修改ToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
+            this.部门修改ToolStripMenuItem.Size = new System.Drawing.Size(193, 24);
             this.部门修改ToolStripMenuItem.Text = "部门修改";
             this.部门修改ToolStripMenuItem.Click += new System.EventHandler(this.部门修改ToolStripMenuItem_Click);
             // 
             // 项目新增ToolStripMenuItem1
             // 
             this.项目新增ToolStripMenuItem1.Name = "项目新增ToolStripMenuItem1";
-            this.项目新增ToolStripMenuItem1.Size = new System.Drawing.Size(199, 26);
+            this.项目新增ToolStripMenuItem1.Size = new System.Drawing.Size(193, 24);
             this.项目新增ToolStripMenuItem1.Text = "项目新增(单部门)";
             this.项目新增ToolStripMenuItem1.Click += new System.EventHandler(this.项目新增ToolStripMenuItem1_Click);
             // 
             // 项目新增多部门ToolStripMenuItem
             // 
             this.项目新增多部门ToolStripMenuItem.Name = "项目新增多部门ToolStripMenuItem";
-            this.项目新增多部门ToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
+            this.项目新增多部门ToolStripMenuItem.Size = new System.Drawing.Size(193, 24);
             this.项目新增多部门ToolStripMenuItem.Text = "项目新增(多部门)";
             this.项目新增多部门ToolStripMenuItem.Click += new System.EventHandler(this.项目新增多部门ToolStripMenuItem_Click);
             // 
@@ -320,8 +320,8 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 74F));
             this.tableLayoutPanel2.Controls.Add(this.gridControl1, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.gridControl2, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.panel1, 1, 1);
@@ -329,7 +329,7 @@
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 26);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(1581, 898);
@@ -340,11 +340,11 @@
             this.gridControl1.ContextMenuStrip = this.contextMenuStrip2;
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gridControl1.Location = new System.Drawing.Point(477, 79);
+            this.gridControl1.Location = new System.Drawing.Point(414, 72);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(1101, 815);
+            this.gridControl1.Size = new System.Drawing.Size(1164, 822);
             this.gridControl1.TabIndex = 23;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -454,9 +454,9 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(477, 18);
+            this.panel1.Location = new System.Drawing.Point(414, 11);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1101, 54);
+            this.panel1.Size = new System.Drawing.Size(1164, 54);
             this.panel1.TabIndex = 22;
             // 
             // DepartmentStartup
